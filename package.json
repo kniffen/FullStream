@@ -3,6 +3,7 @@
   "version": "0.5.1",
   "description": "An alternative interface for browsing and viewing Twitch.tv content",
   "author": "Kniffen <knifftech@gmail.com>",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",

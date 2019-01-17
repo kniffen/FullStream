@@ -41,7 +41,7 @@
         isLoading:   true,
         clientID:    process.env.CLIENT_ID,
         scopes:      process.env.SCOPES,
-        redirectURI: window.location.origin,
+        redirectURI: window.location.origin + window.location.pathname,
         token:       localStorage.token,
         username:    '',
         userID:      '',

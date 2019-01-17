@@ -22,7 +22,7 @@ import ChannelFollowing from '@/components/views/channel/Following'
 Vue.use(Router)
 
 export default new Router({
-  mode: 'history',
+  mode: 'hash',
   routes: [
     {
       path:     '/',

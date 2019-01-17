@@ -1,21 +1,13 @@
-# fullstream
+# FullStream
 
 > An alternative interface for browsing and viewing Twitch.tv content
 
-## Build Setup
+FullStream is an alternative and simplified interface for browsing and viewing Twitch content.
+It originated from wanting a solution to watch and browse Twitch at the same time in a fullscreen environment, hence the name.
+Since then it has evolved to be more and more feature rich, though development was put on hold from late 2016 until early 2019.
 
-``` bash
-# install dependencies
-npm install
 
-# serve with hot reload at localhost:8080
-npm run dev
+## Changelog
 
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+0.5.0 - 2019.01.17
+- Initial re-release

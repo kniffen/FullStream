@@ -123,7 +123,7 @@
       if (tokenStr) {
         this.token         = tokenStr[1]
         localStorage.token = tokenStr[1]
-        window.history.pushState({}, document.title, "/following")
+        this.$router.push('following')
       }
 
       if (this.token) {

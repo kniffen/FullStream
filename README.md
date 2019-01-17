@@ -11,3 +11,9 @@ Since then it has evolved to be more and more feature rich, though development w
 
 0.5.0 - 2019.01.17
 - Initial re-release
+
+0.5.1 - 2019.01.17
+- Fixed fixed videos not loading if a stream is playing
+- Removed follow button from own channel page
+- Fixed channel pages not updating when switching targets
+- Fixed game icon not updating in header

@@ -46,7 +46,7 @@
 
         <li class="channel-buttons">
           <button v-if="isFollowing" class="cta cta-unfollow" v-on:click="unfollow"></button>
-          <button v-else class="cta cta-follow" v-on:click="follow">Follow</button>
+          <button v-else-if="userID != user.id" class="cta cta-follow" v-on:click="follow">Follow</button>
           <a class="cta-twitch" v-bind:href="`https://www.twitch.tv/${user.name}`" target="_blank"><i class="fsif-twitch"></i> View on twitch</a>
         </li>
       
@@ -129,24 +129,35 @@
         unfollowChannel(this.userID, this.user.id)
           .then(success => this.isFollowing = !success)
       },
+
+      fetchData: async function() {
+        const name   = this.$route.params.name
+        let user     = await fetchStream(name.toLowerCase())
+        const panels = await fetchPanels(name.toLowerCase())
+        const teams  = await fetchTeams({username: name.toLowerCase()})
+        
+        if (!user) user = await fetchChannel(name.toLowerCase())
+
+        this.name      = name
+        this.user      = user
+        this.panels    = panels
+        this.teams     = teams
+        
+        this.checkIfFollowing()
+      }
     },
 
     mounted: async function() {
-      const name   = this.$route.params.name
-      let user     = await fetchStream(name.toLowerCase())
-      const panels = await fetchPanels(name.toLowerCase())
-      const teams  = await fetchTeams({username: name.toLowerCase()})
-      
-      if (!user) user = await fetchChannel(name.toLowerCase())
-
-      this.name      = name
-      this.user      = user
-      this.panels    = panels
-      this.teams     = teams
-      
-      this.checkIfFollowing()
-
+      await this.fetchData()
       this.isLoading = false
+    },
+
+    watch: {
+      $route: async function() {
+        this.isLoading = true
+        await this.fetchData()
+        this.isLoading = false
+      }
     }
   }
 </script>

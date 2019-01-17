@@ -84,19 +84,26 @@
           
           if (!channel) return 
 
+          this.current.video   = null
+          this.current.clip    = null
           this.current.channel = channel
 
         } else if (params[1] == 'video') {
           const video = await fetchVideo(params[2])
 
           if (!video) return
-          this.current.video = video
+          this.current.channel = null
+          this.current.clip    = null
+          this.current.video   = video
         
         } else if (params[1] == 'clip') {
           const clip = await fetchClip(params[2])
 
           if (!clip) return
-          this.current.clip = clip
+
+          this.current.channel = null
+          this.current.video   = null
+          this.current.clip    = clip
         }
 
         this.mainHidden = ['watch', 'video', 'clip'].includes(params[1])

@@ -11,7 +11,11 @@
             <ChannelIcon v-bind:name="name" />{{displayName}}
           </router-link>
           
-          <router-link v-bind:title="category" v-bind:to="`/category/${encodeURIComponent(category)}`">
+          <router-link 
+            v-if="category" 
+            v-bind:title="category" 
+            v-bind:to="`/category/${encodeURIComponent(category)}`"
+          >
             <CategoryIcon v-bind:name="category"/>{{category}}
           </router-link>
           
@@ -93,18 +97,20 @@
       setUptime: function() {
         if (this.current.channel && this.current.channel.started) {
           this.uptime = moment.utc(moment() - moment(this.current.channel.started)).format('H:mm:ss')
+        } else {
+          this.uptime = 0
         }
       },
 
       parseCurrent: function() {
         const { channel, video, clip } = this.current
-
+        
         if (channel) {
           this.image       = channel.avatar
           this.title       = channel.title
           this.name        = channel.name
           this.displayName = channel.displayName
-          this.category    = channel.category.name
+          this.category    = channel.category.name || ''
           this.views       = channel.views
           this.viewers     = channel.viewers
           this.mediaStats  = channel.resolution && channel.fps ? `${channel.resolution}p${channel.fps}` : ''
@@ -114,16 +120,20 @@
           this.title       = video.title
           this.name        = video.channel.name
           this.displayName = video.channel.displayName
-          this.category    = video.category.name
+          this.category    = video.category.name || ''
           this.views       = video.views
+          this.viewers     = 0
+          this.mediaStats  = ''
         
         } else if (clip) {
           this.image       = clip.channel.avatar
           this.title       = clip.title
           this.name        = clip.channel.name
           this.displayName = clip.channel.displayName
-          this.category    = clip.category.name,
+          this.category    = clip.category.name || '',
           this.views       = clip.views
+          this. viewers    = 0
+          this.mediaStats  = ''
         }
       }
     },

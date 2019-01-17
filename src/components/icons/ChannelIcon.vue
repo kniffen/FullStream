@@ -48,7 +48,7 @@
     methods: {
       setIcon: function() {
         const icon = this.icons.find(icon => icon.channels.includes(this.name))
-        if (icon) this.iconFontClassName = `fsif-${icon.className}`        
+        this.iconFontClassName = icon ? `fsif-${icon.className}` : 'fsif-camera'        
       }
     },
 

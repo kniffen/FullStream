@@ -71,8 +71,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new WebpackIconfontPluginNodejs({
       fontName:    'fullstream-iconfont',
       svgs:        path.resolve(__dirname, '../src/assets/icons/**/*.svg'),
-      fontsOutput: path.resolve(__dirname, '../src/assets/fonts/fullstream-iconfont'),
-      cssOutput:   path.resolve(__dirname, '../src/assets/fonts/fullstream-iconfont/fullstream-iconfont.css'),
+      fontsOutput: path.resolve(__dirname, '../static/assets/fonts/fullstream-iconfont'),
+      cssOutput:   path.resolve(__dirname, '../static/assets/fonts/fullstream-iconfont/fullstream-iconfont.css'),
       cssPrefix:   'fsif'
     }),
   ]

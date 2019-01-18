@@ -120,6 +120,7 @@
   .video-details {
     padding: .5em 0;
     display: grid;
+    grid-template-columns: minmax(0, 100%);
     grid-gap: .5em;
   }
 

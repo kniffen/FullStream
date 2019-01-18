@@ -9,11 +9,18 @@ Since then it has evolved to be more and more feature rich, though development w
 
 ## Changelog
 
-0.5.0 - 2019.01.17
-- Initial re-release
+0.5.2 - 2019.01.18
+- Fixed stream and video boxes overflowing if title text is long
+- Moved icon font location
+- Added uptime to stream boxes
+- Fixed header image size in Firefox
+- Improved responsiveness of header navigation
 
 0.5.1 - 2019.01.17
 - Fixed fixed videos not loading if a stream is playing
 - Removed follow button from own channel page
 - Fixed channel pages not updating when switching targets
 - Fixed game icon not updating in header
+
+0.5.0 - 2019.01.17
+- Initial re-release

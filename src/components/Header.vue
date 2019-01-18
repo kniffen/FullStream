@@ -49,7 +49,7 @@
     </div>
 
     <nav v-if="ctaPath">
-      <span v-if="settings.chatEnabled" class="chat-toggle" v-on:click="$root.$emit('toggle-chat')">
+      <span v-if="settings.chatEnabled && current.channel" class="chat-toggle" v-on:click="$root.$emit('toggle-chat')">
         <i class="fsif-chat"></i>
         <i class="fsif-chat-disabled"></i>
       </span>
@@ -198,7 +198,7 @@
   }
 
   .header-image {
-    max-height: 100%;
+    max-height: 40px;
     margin: auto 0;
   }
 
@@ -216,9 +216,11 @@
 
   nav {
     display: grid;
-    grid-template-columns: repeat(2, auto);
+    width: 3em;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1em));
     grid-gap: 1em;
     align-content: center;
+    justify-content: end;
     font-size: 1.6rem;
     margin-right: .5em;
   }

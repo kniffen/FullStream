@@ -22,8 +22,11 @@
       </router-link>
     
       <div class="stream-meta">
-        <span>
+        <span v-bind:title="`${viewers.toLocaleString()} Viewers`">
           <i class="fsif-user"></i>{{viewers.toLocaleString()}}
+        </span>
+        <span v-bind:title="`uptime: ${uptime}`">
+          <i class="fsif-clock"></i>{{uptime}}
         </span>
       </div>
 
@@ -40,10 +43,14 @@
 </template>
 
 <script>
+  import moment from 'moment'
+
   import CategoryIcon from '../icons/CategoryIcon'
   
   export default {
     name: 'StreamBox',
+
+    components: {CategoryIcon},
 
     props: [
       'name',
@@ -53,10 +60,22 @@
       'title',
       'category',
       'viewers',
-      'hosts'
+      'hosts',
+      'started'
     ],
 
-    components: {CategoryIcon},
+    data: function() {
+      return {
+        uptime: ''
+      }
+    },
+
+    mounted: function() {
+      if (this.started) {
+        this.uptime = moment.utc(moment() - moment(this.started)).format('H:mm:ss')
+      }
+    }
+
   }
 </script>
 
@@ -105,6 +124,7 @@
   .stream-details {
     padding: .5em 0 0;
     display: grid;
+    grid-template-columns: minmax(0, 100%);
     grid-gap: .5em;
   }
 

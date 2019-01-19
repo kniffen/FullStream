@@ -1,4 +1,7 @@
-export default async function fetchClip(slug) {
+import checkFollowStatus from './check-follow-status'
+import checkSubscriptionStatus from './check-subscription-status'
+
+export default async function fetchClip(slug, userID) {
 
   const res = await fetch(`https://api.twitch.tv/kraken/clips/${slug}`, {
     headers: {
@@ -9,28 +12,40 @@ export default async function fetchClip(slug) {
 
   if (res.status != 200) return
 
-  const clip = await res.json()
+  const data = await res.json()
 
-  return {
-    slug:            clip.slug,
-    title:           clip.title,
-    published:       clip.created_at,
+  const clip = {
+    slug:            data.slug,
+    title:           data.title,
+    published:       data.created_at,
     isPublic:        true,
-    length:          Math.ceil(clip.duration * 1000),
-    views:           clip.views,
-    thumbnail:       clip.thumbnails.medium,
-    category:        {name: clip.game},
+    length:          Math.ceil(data.duration * 1000),
+    views:           data.views,
+    thumbnail:       data.thumbnails.medium,
+    category:        {name: data.game},
     channel: {
-      id:          clip.broadcaster.id,
-      name:        clip.broadcaster.name,
-      displayName: clip.broadcaster.display_name,
-      avatar:      clip.broadcaster.logo,
+      id:           data.broadcaster.id,
+      name:         data.broadcaster.name,
+      displayName:  data.broadcaster.display_name,
+      avatar:       data.broadcaster.logo,
+      isFollowing:  false,
+      isSubscribed: false
     },
     curator: {
-      id:          clip.curator.id,
-      name:        clip.curator.name,
-      displayName: clip.curator.display_name,
-      avatar:      clip.curator.logo,
+      id:          data.curator.id,
+      name:        data.curator.name,
+      displayName: data.curator.display_name,
+      avatar:      data.curator.logo,
     }
   }
+
+  if (userID) {
+    clip.channel.isFollowing = await checkFollowStatus(userID, clip.channel.id)
+  }
+
+  if (userID && localStorage.token) {
+    clip.channel.isSubscribed = await checkSubscriptionStatus(userID, clip.channel.id)
+  }
+
+  return clip
 }

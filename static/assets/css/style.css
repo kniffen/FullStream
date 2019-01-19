@@ -1,0 +1,173 @@
+/*
+  FullStream
+  Global styles
+ */
+* {
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg:       #17181D;
+  --color-bg-2:     #1C1D22;
+  --color-bg-3:     #303136;
+  --color-text:     #DEDDDD;
+  --color-text-2:   #DEDDDD;
+  --color-border:   #303136;
+  --color-green:    #69B02E;
+  --color-blue:     #468BAA;
+  --color-purple:   #7E629A;
+  font-size: 12px;
+}
+
+.theme-light{
+  --color-bg:       #FAF9FA;
+  --color-bg-2:     #DEDDDD;
+  --color-bg-3:     #DCDCDC;
+  --color-text:     #000000;
+  --color-border:   #DEDDDD;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text); 
+  font-family: 'Roboto', Arial, sans-serif;
+  word-wrap: break-word;
+  overflow: hidden;
+}
+
+a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-blue);
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 400;
+}
+
+h1,
+h2 {
+  margin-bottom: .5em;
+}
+
+h1 {
+  text-transform: uppercase;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: top;
+}
+
+ul,
+ol {
+  margin-left: 1.5em;
+}
+
+blockquote {
+  border-left: .25em solid var(--color-border);
+  padding-left: .5em;
+}
+
+i {
+  font-weight: normal;
+  margin-right: .25em;
+}
+
+.content h1,
+.content h2 {
+  margin: 0;
+  border: 0;
+}
+
+.content a {
+  color: var(--color-blue);
+}
+
+.content a:hover {
+  text-decoration: underline;
+}
+
+.cta,
+.cta-twitch,
+.load-more {
+  display: inline-block;
+  border: 0;
+  background-color: var(--color-blue);
+  color: var(--color-text-2);
+  padding: .25em .5em;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  vertical-align: middle;
+  text-transform: uppercase;
+}
+
+.cta-twitch {
+  background-color: var(--color-purple);
+}
+
+.cta-twitch i {
+  font-size: .9rem;
+}
+
+.cta:hover,
+.cta-twitch:hover {
+  color: var(--color-text);
+}
+
+.load-more {
+  display: block;
+  margin: 2em auto;
+}
+
+.stream-list,
+.category-list,
+.user-list,
+.video-list,
+.team-list,
+.event-list {
+  display: grid;
+  grid-gap: 1em;
+}
+
+.stream-list,
+.video-list {
+  grid-template-columns: repeat(auto-fill, 240px);
+}
+
+.category-list {
+  grid-template-columns: repeat(auto-fill, 136px);
+}
+
+.user-list {
+  grid-template-columns: repeat(auto-fill, calc(140px - 1em));
+}
+
+.team-list {
+  grid-template-columns: repeat(3, 434px);
+}
+
+.event-list {
+  grid-template-columns: repeat(auto-fill, calc(320px - 1em));
+}
+
+::-webkit-scrollbar {
+  background-color: var(--color-bg-2);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-bg-3);
+}

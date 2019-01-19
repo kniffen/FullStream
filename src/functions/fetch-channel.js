@@ -1,22 +1,21 @@
-export default async function fetchChannel(username) {
+import checkFollowStatus       from './check-follow-status'
+import checkSubscriptionStatus from './check-subscription-status'
+
+export default async function fetchChannel(channelName, userID) {
 
   const res = await fetch(
-    `https://api.twitch.tv/kraken/channels/${username}`,
+    `https://api.twitch.tv/kraken/channels/${channelName}`,
     {
       headers: {
-        'Authorization': `OAuth ${localStorage.token}`
-    }
-  })
+        'Client-ID': process.env.CLIENT_ID
+      }
+    })
 
-  if (res.status == 400) {
-    window.location.reload()
-  } else if (res.status != 200) {
-    return
-  }
+  if (res.status != 200) return
 
   const data = await res.json()
 
-  return {
+  const channel = {
     id:          data._id,
     name:        data.name,
     displayName: data.display_name,
@@ -27,6 +26,18 @@ export default async function fetchChannel(username) {
     views:       data.views,
     created:     data.created_at,
     category:    {name: data.game},
+    isFollowing: false,
+    isSubscribed: false,
   }
+
+  if (userID) {
+    channel.isFollowing  = await checkFollowStatus(userID, channel.id)
+  }
+
+  if (userID && localStorage.token) {
+    channel.isSubscribed = await checkSubscriptionStatus(userID, channel.id)
+  }
+
+  return channel
 
 }

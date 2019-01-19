@@ -22,7 +22,7 @@
           </select>
         </div>
 
-        <!-- <div class="setting">
+<!--         <div class="setting">
           <span>PiP location</span>
           <select v-model="settings.pipLocation">
             <option value="top-left">Top left</option>
@@ -42,7 +42,7 @@
       </form>
     </section>
 
-    <section>
+    <section v-if="hasToken">
       <h2>Following</h2>
       <form id="following-settings-form" class="settings-form">
         <div class="setting">
@@ -125,6 +125,20 @@
         </div>
       </form>
     </section>
+
+    <section>
+      <h2>Data</h2>
+
+      <button class="cta" v-on:click="eraseData">Erase data</button>
+
+      <br />
+      <br />
+      
+      <div class="content">
+        <p>To fully remove FullStream's access to your Twitch account you need to go to your <a href="https://www.twitch.tv/settings/connections" target="_blank">Twitch connections settings</a></p>
+      </div>
+    </section>
+
   </div>
 </template>
 
@@ -134,6 +148,20 @@
     name: 'Settings',
 
     props: ['settings'],
+
+    data: function() {
+      return {
+        hasToken: localStorage.token ? true : false
+      }
+    },
+
+    methods: {
+      eraseData: function() {
+        delete localStorage.token
+        delete localStorage.settings
+        window.location.reload()
+      }
+    },
 
     watch: {
       settings: {

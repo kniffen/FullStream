@@ -6,7 +6,9 @@
         <i class="fsif-play"></i>
       </router-link>
 
-      <img v-bind:src="`${thumbnail.replace('{width}', '240').replace('{height}', '135')}?timestamp=${Date.now()}`" />
+      <img 
+        class="stream-thumbnail" 
+        v-bind:src="`${thumbnail.replace('{width}', '240').replace('{height}', '135')}?timestamp=${Date.now()}`" />
 
       <div class="channel-identity">
         <img v-bind:src="avatar">
@@ -72,7 +74,7 @@
 
     mounted: function() {
       if (this.started) {
-        this.uptime = moment.utc(moment() - moment(this.started)).format('H:mm:ss')
+        this.uptime = moment(this.started).fromNow(true)
       }
     }
 
@@ -85,6 +87,10 @@
     position: relative;
     display: block;
     height: 135px;
+  }
+
+  .stream-thumbnail {
+    width: 100%;
   }
 
   .stream-link {

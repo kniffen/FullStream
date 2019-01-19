@@ -9,6 +9,21 @@ Since then it has evolved to be more and more feature rich, though development w
 
 ## Changelog
 
+0.6.0 - 2019.01.19
+- Changed uptime string on stream boxes
+- Fixed missing uptime on some stream pages
+- Moved global styles to own stylesheet
+- Improved panel layout
+- Added info menu item to channel pages
+- Added favicon
+- Added featured streams
+- Improved initial experience
+- Added ability to delete user data
+- Added following and subscription status to header
+- Added subscription status to channel pages
+- Added button to close stream in header
+- Updated icon font
+
 0.5.2 - 2019.01.18
 - Fixed stream and video boxes overflowing if title text is long
 - Moved icon font location

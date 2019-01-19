@@ -12,8 +12,10 @@ export default async function fetchFollowingStreams() {
       }
     })
 
-    if (res.status == 400) {
-      window.location.reload()
+    if ([400, 401].includes(res.status)) {
+      delete localStorage.token
+      document.body.classList.add('show-login')
+      break
     } else if (res.status != 200) {
       break
     }

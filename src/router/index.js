@@ -1,6 +1,8 @@
 import Vue    from 'vue'
 import Router from 'vue-router'
 
+import Loading from '@/components/Loading'
+
 import Following   from '@/components/views/Following'
 import Categories  from '@/components/views/Categories'
 import Category    from '@/components/views/Category'
@@ -21,53 +23,82 @@ import ChannelFollowing from '@/components/views/channel/Following'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   mode: 'hash',
   routes: [
     {
       path:     '/',
       name:     'Home',
-      redirect: '/following'
+      redirect: '/streams',
+    },
+    {
+      path:     '/watch/:name',
+      name:     'Watch',
+      component: Loading,
+    },
+    {
+      path:     '/video/:id',
+      name:     'Video',
+      component: Loading,
+    },
+    {
+      path:     '/clip/:slug',
+      name:     'Clip',
+      component: Loading,
     },
     {
       path:      '/following',
       name:      'Following',
       component: Following,
+      meta: { title: 'Following' }
     },
     {
       path:      '/categories',
       name:      'Categories',
       component: Categories,
+      meta: { title: 'Categories' }
     },
     {
-      path:      '/streams',
+      path:     '/streams',
+      name:     'StreamsRedirect',
+      redirect: '/streams/featured',
+      meta: { title: 'Streams' }
+    },
+    {
+      path:      '/streams/:type',
       name:      'Streams',
       component: Streams,
+      meta: { title: 'Streams' }
     },
     {
       path:      '/teams',
       name:      'Teams',
       component: Teams,
+      meta: { title: 'Teams' }
     },
     {
       path:      '/videos',
       name:      'Videos',
       component: Videos,
+      meta: { title: 'Videos' }
     },
     {
       path:      '/search',
       name:      'Search',
       component: Search,
+      meta: { title: 'Search' }
     },
     {
       path:      '/settings',
       name:      'Settings',
       component: Settings,
+      meta: { title: 'Settings' }
     },
     {
       path:      '/about',
       name:      'About',
       component: About,
+      meta: { title: 'About' }
     },
     {
       path:      '/category/:name',
@@ -111,3 +142,18 @@ export default new Router({
     },
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  let title = 'FullStream'
+
+  if (to.meta.title) {
+    title += ` - ${to.meta.title}`
+  } else if (to.params.name) {
+    title += ` - ${to.params.name}`
+  }
+
+  document.title = title
+  next()
+})
+
+export default router

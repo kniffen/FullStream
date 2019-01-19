@@ -1,12 +1,17 @@
-export default async function fetchStreams({ category, offset = 0, channels }) {
+export default async function fetchStreams({ category, offset = 0, channels, featured }) {
 
   const streams = []
 
-  let URI =  `https://api.twitch.tv/kraken/streams/?limit=100&offset=${offset}`
+  let URI =  'https://api.twitch.tv/kraken/streams'
+
+  if (featured) URI += '/featured'
+
+  URI += `/?limit=100&offset=${offset}`
 
   if (category) URI += `&game=${encodeURIComponent(category)}`
 
   if (channels) URI += `&channel=${encodeURIComponent(channels.join(','))}`
+
 
   const res = await fetch(URI, {
     headers: {
@@ -18,23 +23,26 @@ export default async function fetchStreams({ category, offset = 0, channels }) {
 
   const data = await res.json()
 
-  data.streams.forEach(_stream => {
-    const started = new Date(_stream.created_at)
+  const arr = data.streams || data.featured
+
+  arr.forEach(item => {
+    const channel = featured ? item.stream.channel : item.channel
+    const _stream  = featured ? item.stream         : item
 
     streams.push({
-      id:          _stream.channel._id,
+      id:          channel._id,
       streamID:    _stream._id,
-      name:        _stream.channel.name,
-      displayName: _stream.channel.display_name,
-      followers:   _stream.channel.followers,
-      avatar:      _stream.channel.logo,
-      isPartner:   _stream.channel.partner,
-      title:       _stream.channel.status,
+      name:        channel.name,
+      displayName: channel.display_name,
+      followers:   channel.followers,
+      avatar:      channel.logo,
+      isPartner:   channel.partner,
+      title:       channel.status,
       streamType:  _stream.stream_type,
-      thumbnail:   _stream.preview.template,
+      thumbnail:   featured ? item.image : _stream.preview.template,
       viewers:     _stream.viewers,
-      views:       _stream.channel.views,
-      timestamp:   started.getTime(), 
+      views:       channel.views,
+      started:     _stream.created_at, 
       resolution:  Math.floor(_stream.video_height),
       fps:         Math.floor(_stream.average_fps),
       category: {

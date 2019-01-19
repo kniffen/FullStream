@@ -34,6 +34,14 @@
           <span v-if="uptime && settings.showUptime" v-bind:title="`uptime ${uptime}`">
             <i class="fsif-clock"></i>{{uptime}}
           </span>
+
+          <span v-if="isFollowing" v-bind:title="`You are following ${displayName}`">
+            <i class="fsif-heart"></i>Following
+          </span>
+
+          <span v-if="isSubscribed" v-bind:title="`You are subscribed to ${displayName}`">
+            <i class="fsif-sub"></i>Subscribed
+          </span>
         </div>
       </div>
     </div>
@@ -48,16 +56,31 @@
       </div>
     </div>
 
-    <nav v-if="ctaPath">
+    <nav>
+      <a 
+        v-if="!hasToken"
+        href="#" 
+        class="cta-twitch" 
+        v-on:click="showLogin"
+      ><i class="fsif-twitch"></i> Log in</a>
+
       <span v-if="settings.chatEnabled && current.channel" class="chat-toggle" v-on:click="$root.$emit('toggle-chat')">
         <i class="fsif-chat"></i>
         <i class="fsif-chat-disabled"></i>
       </span>
       
-      <router-link v-bind:to="ctaPath" class="main-toggle">
+      <router-link v-if="ctaPath" v-bind:to="ctaPath" class="main-toggle">
         <i class="fsif-menu"></i>
         <i class="fsif-chevron"></i>
       </router-link>
+
+      <span 
+        v-if="current.channel || current.video || current.clip" 
+        v-on:click="closeMedia"
+        class="close-media"
+      >
+        <i class="fsif-cross"></i>
+      </span>
     </nav>
 
   </header>
@@ -73,13 +96,13 @@
   export default {
     name: 'Header',
 
-    props: ['current', 'chatHidden', 'settings'],
+    props: ['userID', 'current', 'chatHidden', 'settings'],
 
     components: {CategoryIcon, ChannelIcon},
 
     data: function() {
       return {
-        isMainToggled: true,
+        hasToken:      localStorage.token ? true : false,
         ctaPath:       '',
         uptime:        0,
         image:         '',
@@ -90,6 +113,8 @@
         viewers:       0,
         views:         0,
         mediaStats:    '',
+        isFollowing:   false,
+        isSubscribed:  false,
       }
     },
 
@@ -106,35 +131,56 @@
         const { channel, video, clip } = this.current
         
         if (channel) {
-          this.image       = channel.avatar
-          this.title       = channel.title
-          this.name        = channel.name
-          this.displayName = channel.displayName
-          this.category    = channel.category.name || ''
-          this.views       = channel.views
-          this.viewers     = channel.viewers
-          this.mediaStats  = channel.resolution && channel.fps ? `${channel.resolution}p${channel.fps}` : ''
+          this.id           = channel.id
+          this.image        = channel.avatar
+          this.title        = channel.title
+          this.name         = channel.name
+          this.displayName  = channel.displayName
+          this.category     = channel.category.name || ''
+          this.views        = channel.views
+          this.viewers      = channel.viewers
+          this.mediaStats   = channel.resolution && channel.fps ? `${channel.resolution}p${channel.fps}` : ''
+          this.isFollowing  = channel.isFollowing
+          this.isSubscribed = channel.isSubscribed
         
         } else if (video) {
-          this.image       = video.channel.avatar
-          this.title       = video.title
-          this.name        = video.channel.name
-          this.displayName = video.channel.displayName
-          this.category    = video.category.name || ''
-          this.views       = video.views
-          this.viewers     = 0
-          this.mediaStats  = ''
+          this.id           = video.channel.id
+          this.image        = video.channel.avatar
+          this.title        = video.title
+          this.name         = video.channel.name
+          this.displayName  = video.channel.displayName
+          this.category     = video.category.name || ''
+          this.views        = video.views
+          this.viewers      = 0
+          this.mediaStats   = ''
+          this.isFollowing  = video.channel.isFollowing
+          this.isSubscribed = video.channel.isSubscribed
         
         } else if (clip) {
-          this.image       = clip.channel.avatar
-          this.title       = clip.title
-          this.name        = clip.channel.name
-          this.displayName = clip.channel.displayName
-          this.category    = clip.category.name || '',
-          this.views       = clip.views
-          this. viewers    = 0
-          this.mediaStats  = ''
+          this.id           = clip.channel.id
+          this.image        = clip.channel.avatar
+          this.title        = clip.title
+          this.name         = clip.channel.name
+          this.displayName  = clip.channel.displayName
+          this.category     = clip.category.name || '',
+          this.views        = clip.views
+          this.viewers      = 0
+          this.mediaStats   = ''
+          this.isFollowing  = clip.channel.isFollowing
+          this.isSubscribed = clip.channel.isSubscribed
         }
+      
+      },
+
+      showLogin: function() {
+        document.body.classList.add('show-login')
+      },
+
+      closeMedia: function() {
+        this.current.channel = null
+        this.current.video   = null
+        this.current.clip    = null
+        this.$router.push(this.ctaPath)
       }
     },
 
@@ -142,8 +188,7 @@
       this.parseCurrent()
 
       if (['watch', 'video', 'clip'].includes(this.$route.path.split('/')[1])) {
-        this.isMainToggled = false
-        this.ctaPath       = '/following'
+        this.ctaPath = '/streams'
       }
 
       this.setUptime()
@@ -156,10 +201,8 @@
     watch: {
       $route: function(to, from) {
         if (['watch', 'video', 'clip'].includes(from.path.split('/')[1])) {
-          this.isMainToggled = true
           this.ctaPath       = from.path
         } else if (['watch', 'video', 'clip'].includes(to.path.split('/')[1])) {
-          this.isMainToggled = false
           this.ctaPath       = from.path
         }
       },
@@ -215,14 +258,14 @@
   }
 
   nav {
-    display: grid;
-    width: 3em;
-    grid-template-columns: repeat(auto-fit, minmax(0, 1em));
-    grid-gap: 1em;
-    align-content: center;
-    justify-content: end;
+    display: flex;
+    align-items: center;
     font-size: 1.6rem;
     margin-right: .5em;
+  }
+
+  nav > * {
+    margin-left: 1em;
   }
 
   .chat-toggle,
@@ -243,7 +286,10 @@
   .chat-toggle > i,
   .main-toggle > i {
     position: absolute;
-    transition: all .3s ease-in-out;
+  }
+
+  .close-media {
+    cursor: pointer;
   }
 
   .chat-visible .chat-toggle .fsif-chat-disabled,

@@ -38,6 +38,10 @@
         <li v-if="user.isPartner" v-bind:title="`${user.displayName} is partnered with Twitch.TV`">
           <i class="fsif-twitch"></i> Twitch partner
         </li>
+
+        <li v-if="user.isSubscribed" v-bind:title="`You are subscribed to ${user.displayName}`">
+          <i class="fsif-sub"></i> Subscribed
+        </li>
       
         <li v-if="teams.length > 0" class="channel-teams">
           <i class="fsif-users" title="Teams"></i>
@@ -45,8 +49,8 @@
         </li>
 
         <li class="channel-buttons">
-          <button v-if="isFollowing" class="cta cta-unfollow" v-on:click="unfollow"></button>
-          <button v-else-if="userID != user.id" class="cta cta-follow" v-on:click="follow">Follow</button>
+          <button v-if="hasToken && isFollowing" class="cta cta-unfollow" v-on:click="unfollow"></button>
+          <button v-else-if="hasToken && userID != user.id" class="cta cta-follow" v-on:click="follow">Follow</button>
           <a class="cta-twitch" v-bind:href="`https://www.twitch.tv/${user.name}`" target="_blank"><i class="fsif-twitch"></i> View on twitch</a>
         </li>
       
@@ -88,9 +92,8 @@
   import fetchPanels  from '../../../functions/fetch-panels'
   import fetchTeams   from '../../../functions/fetch-teams'
   
-  import checkFollowStatus from '../../../functions/check-follow-status'
-  import unfollowChannel   from '../../../functions/unfollow-channel'
-  import followChannel     from '../../../functions/follow-channel'
+  import unfollowChannel from '../../../functions/unfollow-channel'
+  import followChannel   from '../../../functions/follow-channel'
 
   export default {
     name: 'ChannelInfo',
@@ -101,6 +104,7 @@
 
     data: function() {
       return {
+        hasToken:    localStorage.token ? true : false,
         name:        this.$route.params.name,
         isLoading:   true,
         user:        null,
@@ -115,11 +119,6 @@
         return full ? moment(date).calendar() : moment(date).fromNow(true)
       },
 
-      checkIfFollowing: function() {
-        checkFollowStatus(this.userID, this.user.id)
-          .then(isFollowing => this.isFollowing = isFollowing)
-      },
-
       follow: function() {
         followChannel(this.userID, this.user.id)
           .then(success => this.isFollowing = success)
@@ -132,18 +131,17 @@
 
       fetchData: async function() {
         const name   = this.$route.params.name
-        let user     = await fetchStream(name.toLowerCase())
+        let user     = await fetchStream(name.toLowerCase(), this.userID)
         const panels = await fetchPanels(name.toLowerCase())
         const teams  = await fetchTeams({username: name.toLowerCase()})
         
-        if (!user) user = await fetchChannel(name.toLowerCase())
+        if (!user) user = await fetchChannel(name.toLowerCase(), this.userID)
 
-        this.name      = name
-        this.user      = user
-        this.panels    = panels
-        this.teams     = teams
-        
-        this.checkIfFollowing()
+        this.name        = name
+        this.user        = user
+        this.panels      = panels
+        this.teams       = teams
+        this.isFollowing = user.isFollowing
       }
     },
 
@@ -225,7 +223,7 @@
   }
   
   .cta-unfollow{
-    width: 72px;
+    width: 86px;
   }
 
   .cta-unfollow::before {

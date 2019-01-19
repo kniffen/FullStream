@@ -6,15 +6,11 @@ export default async function fetchFollowingUsers(username, offset = 0) {
     `https://api.twitch.tv/kraken/users/${username}/follows/channels?limit=100&offset=${offset}`,
     {
       headers: {
-       'Authorization': `OAuth ${localStorage.token}`,
+        'Client-ID': process.env.CLIENT_ID
       }
     })
 
-  if (res.status == 400) {
-    window.location.reload()
-  } else if (res.status != 200) {
-    return users
-  }
+  if (res.status != 200) return users
 
   const data = await res.json()
 

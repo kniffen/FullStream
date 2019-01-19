@@ -42,7 +42,7 @@
         const users = await fetchFollowingUsers(this.$route.params.name, this.offset)
 
         this.users         = this.users.concat(users)
-        this.offset        = users.length > 0 ? this.offset + users.length : -1
+        this.offset        = users.length >= 100 ? this.offset + users.length : -1
         this.isLoadingMore = false
       }
     },

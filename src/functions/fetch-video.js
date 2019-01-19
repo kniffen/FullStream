@@ -1,6 +1,9 @@
-export default async function fetchVideo(username) {
+import checkFollowStatus from './check-follow-status'
+import checkSubscriptionStatus from './check-subscription-status'
+
+export default async function fetchVideo(videoID, userID) {
   
-  const res = await fetch(`https://api.twitch.tv/kraken/videos/${username}`, {
+  const res = await fetch(`https://api.twitch.tv/kraken/videos/${videoID}`, {
     headers: {
       'Client-ID': process.env.CLIENT_ID,
       'Accept': 'application/vnd.twitchtv.v5+json'
@@ -11,7 +14,7 @@ export default async function fetchVideo(username) {
 
   const data = await res.json()
 
-  return {
+  const video = {
     id:                 data._id,
     title:              data.title,
     description:        data.description,
@@ -24,16 +27,28 @@ export default async function fetchVideo(username) {
     animatedPreview:    data.animated_preview_url,
     category:           {name: data.game},
     channel: {
-      id:          data.channel._id,
-      name:        data.channel.name,
-      displayName: data.channel.display_name,
-      followers:   data.channel.followers,
-      avatar:      data.channel.logo,
-      isPartner:   data.channel.partner,
-      title:       data.channel.status,
-      views:       data.channel.views,
-      category:    {name: data.channel.game},
+      id:           data.channel._id,
+      name:         data.channel.name,
+      displayName:  data.channel.display_name,
+      followers:    data.channel.followers,
+      avatar:       data.channel.logo,
+      isPartner:    data.channel.partner,
+      title:        data.channel.status,
+      views:        data.channel.views,
+      category:     {name: data.channel.game},
+      isFollowing:  false,
+      isSubscribed: false,
     }
   }
+
+  if (userID) {
+    video.channel.isFollowing = await checkFollowStatus(userID, video.channel.id)
+  }
+
+  if (userID && localStorage.token) {
+    video.channel.isSubscribed = await checkSubscriptionStatus(userID, video.channel.id)
+  }
+
+  return video
 
 }

@@ -26,11 +26,11 @@
       </span>
 
       <div class="video-meta">
-        <span v-bind:title="`Duration ${formatLength(length)}`">
-          <i class="fsif-clock"></i>{{formatLength(length)}}
-        </span>
         <span v-bind:title="`${views.toLocaleString()} views`">
           <i class="fsif-eye"></i>{{views.toLocaleString()}}
+        </span>
+        <span v-bind:title="`Duration ${formatLength(length)}`">
+          <i class="fsif-clock"></i>{{formatLength(length)}}
         </span>
       </div>
     </div>

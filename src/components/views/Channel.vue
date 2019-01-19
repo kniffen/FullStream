@@ -1,11 +1,12 @@
 <template>
   <div class="channel">
     <header>
-      <router-link class="title" v-bind:to="`/channel/${name}`">
+      <span class="title">
         <ChannelIcon v-bind:name="name" />{{name}}
-      </router-link>
+      </span>
     
       <div class="channel-menu">
+        <router-link v-bind:to="`/channel/${name}`">Info</router-link>
         <router-link v-bind:to="`/channel/${name}/videos/archive`">Archive</router-link>
         <router-link v-bind:to="`/channel/${name}/videos/highlight`">Highlights</router-link>
         <router-link v-bind:to="`/channel/${name}/videos/upload`">Uploads</router-link>
@@ -58,7 +59,7 @@
     margin-right: .5em;
   }
 
-  .channel-menu .router-link-active {
+  .channel-menu .router-link-exact-active {
     color: var(--color-blue);
   }
 </style>

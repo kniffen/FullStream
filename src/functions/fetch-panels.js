@@ -18,7 +18,7 @@ export default async function fetchPanels(username) {
       title:   panel.data.title,
       link:    panel.data.link,
       image:   panel.data.image,
-      html:    panel.html_description.replace(/\n/g, '<br />'),
+      html:    panel.html_description.replace(/\n\n/g, '<br />').replace(/\n/g, '<br />'),
     })
   })
 

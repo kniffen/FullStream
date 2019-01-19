@@ -134,14 +134,12 @@
     },
 
     mounted: async function() {
-      try{
       await this.parseChannels()
       this.isLoading  = false
 
       setInterval(() => {
         this.parseChannels()
       }, 60000)
-      }catch(err){console.log(err)}
     },
   }
 </script>

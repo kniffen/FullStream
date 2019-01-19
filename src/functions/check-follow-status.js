@@ -7,6 +7,15 @@ export default async function checkFollowStatus(userID, channelID) {
     }
   })
 
-  return res.status == 200 ? true : false
+  if ([400, 401].includes(res.status)) {
+    delete localStorage.token
+    document.body.classList.add('show-login')
+    return false
+  
+  } else if (res.status == 200) {
+    return true
+  }
+
+  return false
 
 }

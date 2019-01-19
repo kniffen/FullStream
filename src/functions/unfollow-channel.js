@@ -9,9 +9,10 @@ export default async function unfollowChannel(userID, channelID) {
     }
   })
 
-  if (res.status == 401) {
+  if ([400, 401].includes(res.status)) {
     delete localStorage.token
-    window.location.reload()
+    document.body.classList.add('show-login')
+    return false
   } else if (!res.ok) {
     return false
   }

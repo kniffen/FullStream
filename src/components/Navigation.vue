@@ -1,10 +1,9 @@
 <template>
   <nav>
-    <router-link v-bind:to="`/channel/${username}`"><i class="fsif-user"></i></router-link>
-    <router-link to="/following"><i class="fsif-heart"></i></router-link>
-    <router-link to="/categories"><i class="fsif-gamepad"></i></router-link>
+    <router-link v-if="hasToken" v-bind:to="`/channel/${username}`"><i class="fsif-user"></i></router-link>
+    <router-link v-if="hasToken" to="/following"><i class="fsif-heart"></i></router-link>
     <router-link to="/streams"><i class="fsif-camera"></i></router-link>
-    <!-- <router-link to="/teams"><i class="fsif-users"></i></router-link> -->
+    <router-link to="/categories"><i class="fsif-gamepad"></i></router-link>
     <router-link to="/videos"><i class="fsif-video"></i></router-link>
     <router-link to="/search"><i class="fsif-search"></i></router-link>
     <router-link to="/settings"><i class="fsif-cogs"></i></router-link>
@@ -16,7 +15,13 @@
   export default {
     name: 'Navigation',
 
-    props: ['username']
+    props: ['username'],
+
+    data: function() {
+      return {
+        hasToken: localStorage.token ? true : false
+      }
+    }
   }
 </script>
 

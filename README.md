@@ -9,6 +9,11 @@ Since then it has evolved to be more and more feature rich, though development w
 
 ## Changelog
 
+0.6.1 - 2019.01.20
+- Fixed close stream button in header not closing streams if main content is open
+- Added animated preview to videos
+- Updated icon font with more category icons
+
 0.6.0 - 2019.01.19
 - Changed uptime string on stream boxes
 - Fixed missing uptime on some stream pages

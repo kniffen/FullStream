@@ -7,6 +7,8 @@
       </router-link>
 
       <img v-bind:src="thumbnail.replace('{width}', '240').replace('{height}', '135')" />
+      
+      <img v-if="animatedPreview" v-bind:src="animatedPreview" class="video-animated-preview" />
 
       <div v-if="channel" class="channel-identity">
         <img v-bind:src="channel.avatar">
@@ -56,7 +58,8 @@
       'views', 
       'length', 
       'category', 
-      'published'
+      'published',
+      'animatedPreview'
     ],
 
     components: {CategoryIcon},
@@ -84,7 +87,7 @@
   }
 
   .video-link {
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0,0,0,0.1);
     position: absolute;
     width: 100%;
     height: 100%;
@@ -95,11 +98,12 @@
     justify-content: center;
     font-size: 2rem;
     opacity: 0;
+    z-index: 1;
     color: var(--color-text);
     transition: opacity .1s ease-in-out;
   }
 
-  .video-link:hover {
+  .video-preview:hover .video-link {
     opacity: 1;
   }
 
@@ -131,5 +135,31 @@
 
   .video-meta span {
     margin-right: .5em;
+  }
+
+  .video-animated-preview {
+    display: none;
+    position: absolute;
+    top: 0px;
+    left: 0;
+    animation: animate 10s infinite step-end;
+  }
+
+  .video-preview:hover .video-animated-preview {
+    display: block;
+  }
+
+  @keyframes animate {
+    0%   { top: 0px;     }
+    10%  { top: -135px;  }
+    20%  { top: -270px;  }
+    30%  { top: -405px;  }
+    40%  { top: -540px;  }
+    50%  { top: -675px;  }
+    60%  { top: -810px;  }
+    70%  { top: -945px;  }
+    80%  { top: -1080px; }
+    90%  { top: -1215px; }
+    100% { top: -1350px; }
   }
 </style>

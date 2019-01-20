@@ -13,6 +13,12 @@
         iconFontClassName: 'fsif-gamepad',
         icons: [
           {
+            className: 'deadbydaylight',
+            categories: [
+              'Dead by Daylight'
+            ]
+          },
+          {
             className: 'headphones',
             categories: [
               'Music & Performing Arts'
@@ -22,7 +28,8 @@
             className: 'microphone',
             categories: [
               'Just Chatting',
-              'Talk Shows & Podcasts'
+              'Talk Shows & Podcasts',
+              'ASMR'
             ]
           },
           {
@@ -122,6 +129,122 @@
           {
             className: 'overwatch',
             categories: ['Overwatch']
+          },
+          {
+            className: 'warframe',
+            categories: [
+              'Warframe',
+            ]
+          },
+          {
+            className: 'star',
+            categories: [
+              'Special Events',
+            ]
+          },
+          {
+            className: 'spade',
+            categories: [
+              'Poker',
+              'Blackjack',
+            ]
+          },
+          {
+            className: 'artifact',
+            categories: [
+              'Artifact',
+            ]
+          },
+          {
+            className: 'kingdomhearts',
+            categories: [
+              'Kingdom Hearts HD I.5 + II.5 Remix',
+              'Kingdom Hearts HD II.8: Final Chapter Prologue',
+              'Kingdom Hearts – The Story So Far',
+              'Kingdom Hearts II',
+              'Kingdom Hearts 3D: Dream Drop Distance',
+              'Kingdom Hearts: Birth by Sleep',
+              'Kingdom Hearts',
+              'Kingdom Hearts Union χ[Cross]',
+              'Kingdom Hearts HD 1.5 + 2.5 Remix',
+              'Kingdom Hearts Re:coded',
+              'Kingdom Hearts HD 1.5 ReMIX',
+              'Kingdom Hearts: Chain of Memories',
+              'Kingdom Hearts III',
+              'Kingdom Hearts Re:Chain of Memories',
+            ]
+          },
+          {
+            className: 'pokemon',
+            categories: [
+              'Pokemon: Let\'s Go, Pikachu!/Eevee!',
+              'Pokémon Trading Card Game',
+              'Pokémon Go',
+              'Pokémon Trading Card Game Online',
+              'Pokémon Snap',
+              'Pokémon Rumble',
+              'Pokémon Omega Ruby/Alpha Sapphire',
+              'Pokémon Mystery Dungeon: Blue/Red Rescue Team',
+              'Pokémon Mystery Dungeon: Explorers of Sky',
+              'Pokémon Black/White Version 2',
+              'Pokémon HeartGold/SoulSilver',
+              'Pokémon Platinum',
+              'Pokémon XD: Gale of Darkness',
+              'Pokémon Emerald',
+              'Pokémon Crystal',
+              'Pokémon Black/White',
+              'Pokémon Stadium',
+              'Pokémon Pinball: Ruby & Sapphire',
+              'Pokémon Puzzle League',
+              'Pokémon Ranger',
+              'Pokémon Gold/Silver',
+              'Pokémon Channel',
+              'Pokémon Conquest',
+              'Pokémon Box',
+              'Pokémon FireRed/LeafGreen',
+              'Pokémon Diamond/Pearl',
+              'Pokémon Sun/Moon',
+              'Pokémon Ruby/Sapphire',
+              'Pokémon Red/Blue',
+            ]
+          },
+          {
+            className: 'rust',
+            categories: [
+              'Rust',
+            ]
+          },
+          {
+            className: 'skyrim',
+            categories: [
+              'The Elder Scrolls V: Skyrim',
+              'Skyrim: Very Special Edition',
+            ]
+          },
+          {
+            className: 'starcitizen',
+            categories: [
+              'Star Citizen',
+            ]
+          },
+          {
+            className: 'starcraft-2',
+            categories: [
+              'StarCraft II',
+            ]
+          },
+          {
+            className: 'vr',
+            categories: [
+              'Virtual Reality',
+              'Oculus VR'
+            ]
+          },
+          {
+            className: 'atom',
+            categories: [
+              'Science & Technology',
+            ]
           },
         ]
       }

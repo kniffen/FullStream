@@ -24,7 +24,9 @@ export default async function fetchVideos({username, offset = 0, type = 'archive
   const data = await res.json()
   const vods = username ? data.videos : data.vods
 
-  vods.forEach(vod => {
+  for (let i = 0; i < vods.length; i++) {
+    const vod = vods[i]
+    
     videos.push({
       id:              vod._id,
       title:           vod.title,
@@ -34,7 +36,7 @@ export default async function fetchVideos({username, offset = 0, type = 'archive
       length:          parseInt(vod.length) * 1000,
       views:           vod.views,
       thumbnail:       vod.preview.template || vod.preview,
-      animatedPreview: vod.animated_preview_url,
+      animatedPreview: await checkImage(vod.animated_preview_url),
       category:        {name: vod.game},
       channel: {
         id:          vod.channel._id,
@@ -48,8 +50,19 @@ export default async function fetchVideos({username, offset = 0, type = 'archive
         category:    {name: vod.channel.game},
       }
     })
-  })
+  }
 
   return videos
 
+}
+
+function checkImage(url) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+
+    img.onload  = () => resolve(url)
+    img.onerror = () => resolve(null)
+
+    img.src = url
+  })
 }

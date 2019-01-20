@@ -180,7 +180,10 @@
         this.current.channel = null
         this.current.video   = null
         this.current.clip    = null
-        this.$router.push(this.ctaPath)
+        
+        if (!['watch', 'video', 'clip'].includes(this.ctaPath.split('/')[1])) {
+          this.$router.push(this.ctaPath)
+        }
       }
     },
 
@@ -201,9 +204,9 @@
     watch: {
       $route: function(to, from) {
         if (['watch', 'video', 'clip'].includes(from.path.split('/')[1])) {
-          this.ctaPath       = from.path
+          this.ctaPath = from.path
         } else if (['watch', 'video', 'clip'].includes(to.path.split('/')[1])) {
-          this.ctaPath       = from.path
+          this.ctaPath = from.path
         }
       },
 

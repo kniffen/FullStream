@@ -117,7 +117,7 @@
 
           for (let i = 0; i < 10; i++) { // a max of 1000 streams
             const users = await fetchFollowingUsers(this.username, offset)
-            offline = offline.concat(users)
+            offline = offline.concat(users.filter(user => !offline.find(existing => existing.id == user.id)))
             if (users.length <= 0 ) break
             offset += users.length
           }

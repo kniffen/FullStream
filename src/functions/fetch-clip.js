@@ -10,7 +10,7 @@ export default async function fetchClip(slug, userID) {
     }
   })
 
-  if (res.status != 200) return
+  if (!res.ok) return
 
   const data = await res.json()
 
@@ -40,7 +40,7 @@ export default async function fetchClip(slug, userID) {
   }
 
   if (userID) {
-    clip.channel.isFollowing = await checkFollowStatus(userID, clip.channel.id)
+    clip.channel.isFollowing = await checkFollowStatus({userID, channelID: clip.channel.id})
   }
 
   if (userID && localStorage.token) {

@@ -11,7 +11,7 @@ export default async function fetchChannel(channelName, userID) {
       }
     })
 
-  if (res.status != 200) return
+  if (!res.ok) return
 
   const data = await res.json()
 
@@ -31,7 +31,7 @@ export default async function fetchChannel(channelName, userID) {
   }
 
   if (userID) {
-    channel.isFollowing  = await checkFollowStatus(userID, channel.id)
+    channel.isFollowing  = await checkFollowStatus({userID, channelID:channel.id})
   }
 
   if (userID && localStorage.token) {

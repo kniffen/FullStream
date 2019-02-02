@@ -10,7 +10,7 @@ export default async function fetchVideo(videoID, userID) {
     }
   })
 
-  if (res.status != 200) return
+  if (!res.ok) return
 
   const data = await res.json()
 
@@ -42,7 +42,7 @@ export default async function fetchVideo(videoID, userID) {
   }
 
   if (userID) {
-    video.channel.isFollowing = await checkFollowStatus(userID, video.channel.id)
+    video.channel.isFollowing = await checkFollowStatus({userID, channelID: video.channel.id})
   }
 
   if (userID && localStorage.token) {

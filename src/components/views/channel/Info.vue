@@ -49,8 +49,14 @@
         </li>
 
         <li class="channel-buttons">
-          <button v-if="hasToken && isFollowing" class="cta cta-unfollow" v-on:click="unfollow"></button>
-          <button v-else-if="hasToken && userID != user.id" class="cta cta-follow" v-on:click="follow">Follow</button>
+          <button 
+            class="cta" 
+            v-if="userID != user.id"
+            @click="toggleFollow"
+            @mouseover="mouseOver"
+            @mouseout="mouseOut"
+          >{{followBtnText}}</button>
+
           <a class="cta-twitch" v-bind:href="`https://www.twitch.tv/${user.name}`" target="_blank"><i class="fsif-twitch"></i> View on twitch</a>
         </li>
       
@@ -92,8 +98,8 @@
   import fetchPanels  from '../../../functions/fetch-panels'
   import fetchTeams   from '../../../functions/fetch-teams'
   
-  import unfollowChannel from '../../../functions/unfollow-channel'
-  import followChannel   from '../../../functions/follow-channel'
+  import follow   from '../../../functions/follow'
+  import unfollow from '../../../functions/unfollow'
 
   export default {
     name: 'ChannelInfo',
@@ -104,13 +110,13 @@
 
     data: function() {
       return {
-        hasToken:    localStorage.token ? true : false,
-        name:        this.$route.params.name,
-        isLoading:   true,
-        user:        null,
-        panels:      [],
-        teams:       [],
-        isFollowing: false,
+        name:          this.$route.params.name,
+        isLoading:     true,
+        user:          null,
+        panels:        [],
+        teams:         [],
+        isFollowing:   false,
+        followBtnText: 'Follow',
       }
     },
 
@@ -119,14 +125,26 @@
         return full ? moment(date).calendar() : moment(date).fromNow(true)
       },
 
-      follow: function() {
-        followChannel(this.userID, this.user.id)
-          .then(success => this.isFollowing = success)
+      toggleFollow: async function() {
+        this.followBtnText = 'Loading...'
+
+        if (this.isFollowing) {
+          const success = await unfollow({userID: this.userID, channelID: this.user.id})
+          this.isFollowing = !success
+          this.followBtnText = 'Follow'
+        } else {
+          const success = await follow({userID: this.userID, channelID: this.user.id})
+          this.isFollowing = success
+          this.followBtnText = 'Following'
+        }
       },
 
-      unfollow: function () {
-        unfollowChannel(this.userID, this.user.id)
-          .then(success => this.isFollowing = !success)
+      mouseOver: function() {
+        this.followBtnText = this.isFollowing ? 'Unfollow' : 'Follow'
+      },
+
+      mouseOut: function() {
+        this.followBtnText  = this.isFollowing ? 'Following' : 'Follow'
       },
 
       fetchData: async function() {
@@ -137,11 +155,12 @@
         
         if (!user) user = await fetchChannel(name.toLowerCase(), this.userID)
 
-        this.name        = name
-        this.user        = user
-        this.panels      = panels
-        this.teams       = teams
-        this.isFollowing = user.isFollowing
+        this.name          = name
+        this.user          = user
+        this.panels        = panels
+        this.teams         = teams
+        this.isFollowing   = user.isFollowing
+        this.followBtnText = this.isFollowing ? 'Following' : 'Follow'
       }
     },
 
@@ -222,15 +241,7 @@
     content: ', ';
   }
   
-  .cta-unfollow{
+  .cta{
     width: 86px;
-  }
-
-  .cta-unfollow::before {
-    content: 'Following';
-  }
-
-  .cta-unfollow:hover::before {
-    content: 'Unfollow';
   }
 </style>

@@ -10,7 +10,7 @@ export default async function fetchStream(channelName, userID) {
     }
   })
 
-  if (res.status != 200) return
+  if (!res.ok) return
   
   const data = await res.json()
   
@@ -31,7 +31,7 @@ export default async function fetchStream(channelName, userID) {
     views:        data.stream.channel.views,
     created:      data.stream.channel.created_at,
     started:      data.stream.created_at, 
-    isFollowing: false,
+    isFollowing:  false,
     isSubscribed: false,
     resolution:   Math.floor(data.stream.video_height),
     fps:          Math.ceil(Math.floor(data.stream.average_fps) / 2) * 2 ,
@@ -39,7 +39,7 @@ export default async function fetchStream(channelName, userID) {
   }
 
   if (userID) {
-    stream.isFollowing = await checkFollowStatus(userID, stream.id)
+    stream.isFollowing = await checkFollowStatus({userID, channelID: stream.id})
   }
 
   if (userID && localStorage.token) {

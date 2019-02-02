@@ -29,7 +29,7 @@
 
     components: {ChannelIcon},
 
-    props: ['name']
+    props: ['name'],
   }
 </script>
 

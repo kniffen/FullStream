@@ -5,7 +5,7 @@ export default async function fetchCategory({ id, name }) {
   if (id) {
     uri += `?id=${id}`
   } else if (name) {
-    uri += `?name=${name}`
+    uri += `?name=${encodeURIComponent(name)}`
   }
 
   const res = await fetch(uri, {

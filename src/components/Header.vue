@@ -51,7 +51,7 @@
       <div>
         <div class="header-title">FullStream</div>
         <div class="header-details">
-          <span>A simplified twitch interface</span>
+          <span>An alternative twitch interface</span>
         </div>
       </div>
     </div>

@@ -23,6 +23,12 @@
     text-decoration: none;
   }
 
+  .user-avatar {
+    background-color: var(--color-bg-2);
+    width: 128px;
+    height: 128px;
+  }
+
   .user span {
     padding: .5em 0;
   }

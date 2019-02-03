@@ -198,9 +198,10 @@
   }
 
   .channel-thumbnail {
-    background-color: var(--color-bg-3);
+    background-color: var(--color-bg-2);
     position: relative;
-    max-height: 270px;    
+    min-height: 200px;
+    max-height: 270px;
   }
 
   .channel-link {

@@ -340,6 +340,12 @@
     grid-gap: .5em;
   }
 
+  .channel img {
+    background-color: var(--color-bg-2);
+    width: 100px;
+    height: 100px;
+  }
+
   .channel > div {
     display: grid;
     grid-gap: .25em;

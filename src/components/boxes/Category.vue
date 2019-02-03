@@ -38,6 +38,8 @@
   }
 
   .category-box-art {
+    display: block;
+    background-color: var(--color-bg-2);
     width: 136px;
     height: 190px;
   }

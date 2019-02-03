@@ -51,7 +51,7 @@
         <li class="channel-buttons">
           <button 
             class="cta" 
-            v-if="userID != user.id"
+            v-if="userID && userID != user.id"
             @click="toggleFollow"
             @mouseover="mouseOver"
             @mouseout="mouseOut"

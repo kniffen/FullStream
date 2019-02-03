@@ -98,6 +98,7 @@
     grid-gap: .25em;
     list-style: none;
     margin: 0;
+    justify-items: start;
   }
 
   .details b {

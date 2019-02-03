@@ -27,7 +27,7 @@
         <span v-bind:title="`${viewers.toLocaleString()} Viewers`">
           <i class="fsif-user"></i>{{viewers.toLocaleString()}}
         </span>
-        <span v-bind:title="`uptime: ${uptime}`">
+        <span v-if="uptime" v-bind:title="`uptime: ${uptime}`">
           <i class="fsif-clock"></i>{{uptime}}
         </span>
       </div>
@@ -132,6 +132,7 @@
     display: grid;
     grid-template-columns: minmax(0, 100%);
     grid-gap: .5em;
+    justify-items: start;
   }
 
   .stream-meta > span {

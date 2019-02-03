@@ -344,10 +344,6 @@
     display: grid;
     grid-gap: .25em;
     align-content: start;
-  }
-
-  .cta {
-    display: block;
-    width: 90px;
+    justify-items: start;
   }
 </style>

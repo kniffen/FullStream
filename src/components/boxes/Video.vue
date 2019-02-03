@@ -126,6 +126,7 @@
     display: grid;
     grid-template-columns: minmax(0, 100%);
     grid-gap: .5em;
+    justify-items: start;
   }
 
   .video-meta {

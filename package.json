@@ -1,6 +1,6 @@
 {
   "name": "fullstream",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "An alternative interface for browsing and viewing Twitch.tv content",
   "author": "Kniffen <knifftech@gmail.com>",
   "license": "MIT",

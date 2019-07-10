@@ -32,7 +32,8 @@
     
       <p>
         FullStream stores your <a href="https://dev.twitch.tv/docs/authentication/getting-tokens-oauth/" target="_blank">Twitch token</a> and <router-link to="/settings">settings</router-link> using the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localStorage</a> feature in your browser.<br />
-        We never see or have access to your data.
+        User interaction is also tracked with Google Analytics.<br />
+        We never see or have access to your Twitch.TV data.
       </p>
     </section>
 

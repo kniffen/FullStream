@@ -20,6 +20,7 @@
   import User    from '../../boxes/User'
 
   import fetchFollowingUsers from '../../../functions/fetch-following-users'
+  import fetchSearch  from '../../../functions/fetch-search'
 
   export default {
     name: 'ChannelFollowing',
@@ -38,8 +39,10 @@
     methods: {
       getUsers: async function() {
         this.isLoadingMore = true
-
-        const users = await fetchFollowingUsers(this.$route.params.name, this.offset)
+        
+        const searchResults = await fetchSearch("users", this.$route.params.name.toLowerCase())
+        const user = searchResults.find(entry => entry.name.toLowerCase() == this.$route.params.name.toLowerCase())
+        const users = await fetchFollowingUsers(user.id, this.offset)
 
         this.users         = this.users.concat(users)
         this.offset        = users.length >= 100 ? this.offset + users.length : -1

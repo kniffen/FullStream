@@ -19,7 +19,8 @@
   import Channel from '../Channel'
   import Video   from '../../boxes/Video'
 
-  import fetchVideos  from '../../../functions/fetch-videos'
+  import fetchVideos from '../../../functions/fetch-videos'
+  import fetchSearch from '../../../functions/fetch-search'
 
   export default {
     name: 'ChannelArchive',
@@ -45,8 +46,11 @@
           this.isLoading = true
         }
 
+        const searchResults = await fetchSearch("users", this.$route.params.name.toLowerCase())
+        const user = searchResults.find(entry => entry.name.toLowerCase() == this.$route.params.name.toLowerCase())
+
         const videos = await fetchVideos({
-          username: this.$route.params.name,
+          username: user.id,
           offset:   this.offset,
           type:     this.$route.params.type,
         })

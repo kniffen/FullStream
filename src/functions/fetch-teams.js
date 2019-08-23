@@ -7,7 +7,10 @@ export default async function fetchTeams({ username, offset = 0 }) {
     `https://api.twitch.tv/kraken/teams?limit=100&offset=${offset}`
 
   const res = await fetch(URI, {
-    headers: {'Client-ID': process.env.CLIENT_ID}
+    headers: {
+      'Client-ID': process.env.CLIENT_ID,
+      'Accept': 'application/vnd.twitchtv.v5+json'
+    }
   })
 
   if (res.status != 200) return teams

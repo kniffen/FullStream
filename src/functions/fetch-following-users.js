@@ -1,13 +1,12 @@
-export default async function fetchFollowingUsers(channelID, offset = 0) {
+export default async function fetchFollowingUsers(username, offset = 0) {
 
   const users = []
 
   const res = await fetch(
-    `https://api.twitch.tv/kraken/users/${channelID}/follows/channels?limit=100&offset=${offset}`,
+    `https://api.twitch.tv/kraken/users/${username}/follows/channels?limit=100&offset=${offset}`,
     {
       headers: {
-        'Client-ID': process.env.CLIENT_ID,
-        'Accept': 'application/vnd.twitchtv.v5+json'
+        'Client-ID': process.env.CLIENT_ID
       }
     })
 

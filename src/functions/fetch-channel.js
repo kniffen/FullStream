@@ -1,14 +1,13 @@
 import checkFollowStatus       from './check-follow-status'
 import checkSubscriptionStatus from './check-subscription-status'
 
-export default async function fetchChannel(channelID, userID) {
+export default async function fetchChannel(channelName, userID) {
 
   const res = await fetch(
-    `https://api.twitch.tv/kraken/channels/${channelID}`,
+    `https://api.twitch.tv/kraken/channels/${channelName}`,
     {
       headers: {
-        'Client-ID': process.env.CLIENT_ID,
-        'Accept': 'application/vnd.twitchtv.v5+json'
+        'Client-ID': process.env.CLIENT_ID
       }
     })
 

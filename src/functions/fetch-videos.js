@@ -1,13 +1,12 @@
-export default async function fetchVideos({channelID, offset = 0, type = 'archive'} = {offset: 0}) {
+export default async function fetchVideos({username, offset = 0, type = 'archive'} = {offset: 0}) {
 
   const videos = []
   let res
 
-  if (channelID) {
-    res = await fetch(`https://api.twitch.tv/kraken/channels/${channelID}/videos?limit=100&offset=${offset}&broadcast_type=${type}`, {
+  if (username) {
+    res = await fetch(`https://api.twitch.tv/kraken/channels/${username}/videos?limit=100&offset=${offset}&broadcast_type=${type}`, {
       headers: {
-        'Client-ID': process.env.CLIENT_ID,
-        'Accept': 'application/vnd.twitchtv.v5+json'
+        'Client-ID': process.env.CLIENT_ID
       }
     })
 
@@ -23,7 +22,7 @@ export default async function fetchVideos({channelID, offset = 0, type = 'archiv
   if (res.status != 200) return videos
 
   const data = await res.json()
-  const vods = channelID ? data.videos : data.vods
+  const vods = username ? data.videos : data.vods
 
   for (let i = 0; i < vods.length; i++) {
     const vod = vods[i]
@@ -33,7 +32,7 @@ export default async function fetchVideos({channelID, offset = 0, type = 'archiv
       title:           vod.title,
       description:     vod.description,
       published:       vod.published_at,
-      isPublic:        channelID ? true : vod.viewable == 'public',
+      isPublic:        username ? true : vod.viewable == 'public',
       length:          parseInt(vod.length) * 1000,
       views:           vod.views,
       thumbnail:       vod.preview.template || vod.preview,

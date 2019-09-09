@@ -50,7 +50,6 @@
   import fetchChannel           from './functions/fetch-channel'
   import fetchVideo             from './functions/fetch-video'
   import fetchClip              from './functions/fetch-clip'
-  import fetchSearch            from './functions/fetch-search'
 
   export default {
     name: 'App',
@@ -109,11 +108,9 @@
         const params = this.$route.path.split('/')
 
         if (params[1] == 'watch') {
-          const searchResults = await fetchSearch("users", params[2].toLowerCase())
-          const id = searchResults.find(entry => entry.name.toLowerCase() == params[2].toLowerCase()).id
-          let channel = await fetchStream(id, this.userID) 
+          let channel = await fetchStream(params[2], this.userID) 
           
-          if (!channel) channel = await fetchChannel(id, this.userID)
+          if (!channel) channel = await fetchChannel(params[2], this.userID)
           
           if (!channel) return 
 

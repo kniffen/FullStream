@@ -219,7 +219,7 @@
       }
 
       for (let offset = 0; 0 < 1000; offset += 100) {
-        const channels = await fetchFollowingUsers(this.username, offset)
+        const channels = await fetchFollowingUsers(this.userID, offset)
         
         channels.forEach(channel => {
           if (!this.channels.find(existing => existing.id == channel.id)) {

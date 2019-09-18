@@ -4,6 +4,7 @@ export default async function checkSubscriptionStatus(userID, channelID) {
     headers: {
       'Client-ID': process.env.CLIENT_ID,
       'Authorization': `OAuth ${localStorage.token}`,
+      'Accept': 'application/vnd.twitchtv.v5+json'
     }
   })
 

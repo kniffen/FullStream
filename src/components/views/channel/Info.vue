@@ -2,7 +2,7 @@
   
   <Loading v-if="isLoading" />
 
-  <Channel v-bind:name="name" v-else-if="user" v-bind:class="user.streamType">
+  <Channel v-bind:name="name" v-else-if="user" v-bind:class="user.streamType" >
     <section class="channel-card">
       <div class="channel-thumbnail">
         <router-link class="channel-link" v-bind:to="`/watch/${name}`">
@@ -97,6 +97,7 @@
   import fetchStream  from '../../../functions/fetch-stream'
   import fetchPanels  from '../../../functions/fetch-panels'
   import fetchTeams   from '../../../functions/fetch-teams'
+  import fetchSearch  from '../../../functions/fetch-search'
   
   import follow   from '../../../functions/follow'
   import unfollow from '../../../functions/unfollow'
@@ -106,7 +107,7 @@
 
     components: {Channel, Loading, CategoryIcon},
 
-    props: ['userID'],
+    props: ['getChannelID', 'userID'],
 
     data: function() {
       return {
@@ -149,17 +150,22 @@
 
       fetchData: async function() {
         const name   = this.$route.params.name
-        let user     = await fetchStream(name.toLowerCase(), this.userID)
-        const panels = await fetchPanels(name.toLowerCase())
-        const teams  = await fetchTeams({username: name.toLowerCase()})
         
-        if (!user) user = await fetchChannel(name.toLowerCase(), this.userID)
+        const searchResults = await fetchSearch("users", name.toLowerCase())
+        const id = searchResults.find(entry => entry.name.toLowerCase() == name.toLowerCase()).id
+        
+        let user     = await fetchStream(id, this.userID)
 
+        if (!user) user = await fetchChannel(id, this.userID)
+        
+        const panels = await fetchPanels(name.toLowerCase())
+        const teams  = await fetchTeams({username: user.id})
+        
         this.name          = name
         this.user          = user
         this.panels        = panels
         this.teams         = teams
-        this.isFollowing   = user.isFollowing
+        this.isFollowing   = user ? user.isFollowing : false
         this.followBtnText = this.isFollowing ? 'Following' : 'Follow'
       }
     },
@@ -170,6 +176,9 @@
     },
 
     watch: {
+      channelID: function() {
+        console.log('ff', this.channelID)
+      },
       $route: async function() {
         this.isLoading = true
         await this.fetchData()

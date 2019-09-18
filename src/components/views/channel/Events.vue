@@ -19,6 +19,7 @@
 
   import fetchChannel from '../../../functions/fetch-channel'
   import fetchEvents  from '../../../functions/fetch-events'
+  import fetchSearch  from '../../../functions/fetch-search'
 
   export default {
     name: 'ChannelEvents',
@@ -33,9 +34,10 @@
     },
 
     mounted: async function() {
-      const channel = await fetchChannel(this.$route.params.name)
-      
-      if (channel) this.events = await fetchEvents(channel.id)
+      const searchResults = await fetchSearch("users", this.$route.params.name.toLowerCase())
+      const id = searchResults.find(entry => entry.name.toLowerCase() == this.$route.params.name.toLowerCase()).id
+
+      if (id) this.events = await fetchEvents(id)
       this.isLoading = false
     }
   }

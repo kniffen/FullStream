@@ -50,9 +50,9 @@
         const user = searchResults.find(entry => entry.name.toLowerCase() == this.$route.params.name.toLowerCase())
 
         const videos = await fetchVideos({
-          username: user.id,
-          offset:   this.offset,
-          type:     this.$route.params.type,
+          channelID: user.id,
+          offset:    this.offset,
+          type:      this.$route.params.type,
         })
 
         this.videos = this.videos.concat(videos.map(video => {

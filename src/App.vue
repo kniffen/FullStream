@@ -189,9 +189,9 @@
       
       setInterval(async () => {
         if (this.current.channel) {
-          let channel = await fetchStream(this.current.channel.name, this.userID) 
+          let channel = await fetchStream(this.current.channel.id, this.userID) 
           
-          if (!channel) channel = await fetchChannel(this.current.channel.name, this.userID)
+          if (!channel) channel = await fetchChannel(this.current.channel.id, this.userID)
           
           if (channel) this.current.channel = channel
         }

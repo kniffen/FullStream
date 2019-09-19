@@ -58,7 +58,7 @@
       users.forEach((user, i) => {
         const index = Math.floor(i / 100)
         if (!chunks[index]) chunks[index] = []
-        chunks[index].push(user.name)
+        chunks[index].push(user.id)
       })
 
       for (let i = 0; i < chunks.length; i++) {

@@ -1,5 +1,3 @@
-import fetchChannel from './fetch-channel'
-
 export default async function fetchClips(username) {
   const clips = []
 

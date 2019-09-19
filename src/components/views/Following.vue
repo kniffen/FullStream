@@ -64,7 +64,7 @@
   export default {
     name: 'Following',
 
-    props: ['settings', 'username'],
+    props: ['settings', 'userID'],
 
     components: {Loading, Stream, Category, User},
 
@@ -81,60 +81,68 @@
     },
 
     methods: {
-      parseChannels: async function() {
-        const streams = await fetchFollowingStreams()
-        const live = streams.filter(_stream => _stream.streamType == 'live')
-        live.sort((a, b) => b.viewers - a.viewers)
-        this.live = live
+      parseChannels: function() {
+        fetchFollowingStreams().then(streams => {
+          // Live streams
+          const live = streams.filter(_stream => _stream.streamType == 'live')
+          live.sort((a, b) => b.viewers - a.viewers)
+          this.live = live
 
-        if (this.settings.showPremieres) {
-          const premieres = streams.filter(_stream => _stream.streamType == 'premiere')
-          premieres.sort((a, b) => b.viewers - a.viewers)
-          this.premieres = premieres
-        }
-
-        if (this.settings.showReruns) {
-          const reruns = streams.filter(_stream => _stream.streamType == 'rerun')
-          reruns.sort((a, b) => b.viewers - a.viewers)
-          this.reruns = reruns
-        }
-
-        if (this.settings.showHosted) {
-          const hosted = await fetchFollowingHosting(this.username)
-          hosted.sort((a, b) => b.viewers - a.viewers)
-          this.hosted = hosted
-        }
-
-        if (this.settings.showCategories) {
-          const categories = await fetchFollowingCategories(this.username)
-          categories.sort((a, b) => b.viewers - a.viewers)
-          this.categories = categories.filter(cat => cat.viewers > 0)
-        }
-
-        if (this.settings.showOffline) {
-          let offline = []
-          let offset  = 0
-
-          for (let i = 0; i < 10; i++) { // a max of 1000 streams
-            const users = await fetchFollowingUsers(this.username, offset)
-            offline = offline.concat(users.filter(user => !offline.find(existing => existing.id == user.id)))
-            if (users.length <= 0 ) break
-            offset += users.length
+          // Premieres
+          if (this.settings.showPremieres) {
+            const premieres = streams.filter(_stream => _stream.streamType == 'premiere')
+            premieres.sort((a, b) => b.viewers - a.viewers)
+            this.premieres = premieres
           }
 
-          offline.sort((a, b) => {
-            if (a.name < b.name) return -1
-            if (a.name > b.name) return 1
-            return 0
-          })
+          // Reruns
+          if (this.settings.showReruns) {
+            const reruns = streams.filter(_stream => _stream.streamType == 'rerun')
+            reruns.sort((a, b) => b.viewers - a.viewers)
+            this.reruns = reruns
+          }
+        })
 
-          this.offline = offline.filter(user => !this.live.find(_stream => _stream.id == user.id))
+        // Hosted
+        if (this.settings.showHosted) {
+          fetchFollowingHosting(this.username).then(hosted => {
+            hosted.sort((a, b) => b.viewers - a.viewers)
+            this.hosted = hosted
+          })
+        }
+
+        // Categories
+        if (this.settings.showCategories) {
+          fetchFollowingCategories(this.username).then(categories => {
+            categories.sort((a, b) => b.viewers - a.viewers)
+            this.categories = categories.filter(cat => cat.viewers > 0)
+          })
+        }
+
+        // Offline
+        if (this.settings.showOffline) {
+          this.offline = []
+          const parseUsers = (users, offset) => {
+            this.offline = this.offline.concat(users.filter(user => !this.offline.find(existing => existing.id == user.id)))
+            
+            this.offline.sort((a, b) => {
+              if (a.name < b.name) return -1
+              if (a.name > b.name) return 1
+              return 0
+            })
+
+            if (users.length <= 0) return
+
+            fetchFollowingUsers(this.userID, offset+users.length).then(users => parseUsers(users, offset+users.length))
+          }
+
+          fetchFollowingUsers(this.userID, 0).then(users => parseUsers(users, 0))
         }
       }
     },
 
-    mounted: async function() {
-      await this.parseChannels()
+    mounted: function() {
+      this.parseChannels()
       this.isLoading  = false
 
       setInterval(() => {

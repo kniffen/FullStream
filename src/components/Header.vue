@@ -93,6 +93,9 @@
   import CategoryIcon from './icons/CategoryIcon'
   import ChannelIcon  from './icons/ChannelIcon'
 
+  import checkFollowStatus       from '../functions/check-follow-status'
+  import checkSubscriptionStatus from '../functions/check-subscription-status'
+
   export default {
     name: 'Header',
 
@@ -129,7 +132,7 @@
 
       parseCurrent: function() {
         const { channel, video, clip } = this.current
-        
+
         if (channel) {
           this.id           = channel.id
           this.image        = channel.avatar
@@ -142,6 +145,12 @@
           this.mediaStats   = channel.resolution && channel.fps ? `${channel.resolution}p${channel.fps}` : ''
           this.isFollowing  = channel.isFollowing
           this.isSubscribed = channel.isSubscribed
+
+          checkFollowStatus(this.userID, channel.id)
+            .then(success => this.isFollowing = success)
+        
+          checkSubscriptionStatus(this.userID, channel.id)
+            .then(success => this.isSubscribed = success)
         
         } else if (video) {
           this.id           = video.channel.id
@@ -153,8 +162,12 @@
           this.views        = video.views
           this.viewers      = 0
           this.mediaStats   = ''
-          this.isFollowing  = video.channel.isFollowing
-          this.isSubscribed = video.channel.isSubscribed
+
+          checkFollowStatus(this.userID, video.channel.id)
+            .then(success => this.isFollowing = success)
+            
+          checkSubscriptionStatus(this.userID, video.channel.id)
+            .then(success => this.isSubscribed = success)
         
         } else if (clip) {
           this.id           = clip.channel.id
@@ -168,8 +181,13 @@
           this.mediaStats   = ''
           this.isFollowing  = clip.channel.isFollowing
           this.isSubscribed = clip.channel.isSubscribed
+
+          checkFollowStatus(this.userID, clip.channel.id)
+            .then(success => this.isFollowing = success)
+            
+          checkSubscriptionStatus(this.userID, clip.channel.id)
+            .then(success => this.isSubscribed = success)
         }
-      
       },
 
       showLogin: function() {

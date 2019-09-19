@@ -1,6 +1,3 @@
-import checkFollowStatus from './check-follow-status'
-import checkSubscriptionStatus from './check-subscription-status'
-
 export default async function fetchStream(channelID, userID) {
 
   const res = await fetch(
@@ -32,19 +29,9 @@ export default async function fetchStream(channelID, userID) {
     views:        data.stream.channel.views,
     created:      data.stream.channel.created_at,
     started:      data.stream.created_at, 
-    isFollowing:  false,
-    isSubscribed: false,
     resolution:   Math.floor(data.stream.video_height),
     fps:          Math.ceil(Math.floor(data.stream.average_fps) / 2) * 2 ,
     category:     {name: data.stream.game}
-  }
-
-  if (userID) {
-    stream.isFollowing = await checkFollowStatus({userID, channelID: stream.id})
-  }
-
-  if (userID && localStorage.token) {
-    stream.isSubscribed = await checkSubscriptionStatus(userID, stream.id)
   }
 
   return stream

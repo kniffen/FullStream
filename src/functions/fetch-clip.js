@@ -1,6 +1,3 @@
-import checkFollowStatus from './check-follow-status'
-import checkSubscriptionStatus from './check-subscription-status'
-
 export default async function fetchClip(slug, userID) {
 
   const res = await fetch(`https://api.twitch.tv/kraken/clips/${slug}`, {
@@ -37,14 +34,6 @@ export default async function fetchClip(slug, userID) {
       displayName: data.curator.display_name,
       avatar:      data.curator.logo,
     }
-  }
-
-  if (userID) {
-    clip.channel.isFollowing = await checkFollowStatus({userID, channelID: clip.channel.id})
-  }
-
-  if (userID && localStorage.token) {
-    clip.channel.isSubscribed = await checkSubscriptionStatus(userID, clip.channel.id)
   }
 
   return clip

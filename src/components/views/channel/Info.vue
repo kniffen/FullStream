@@ -39,7 +39,7 @@
           <i class="fsif-twitch"></i> Twitch partner
         </li>
 
-        <li v-if="user.isSubscribed" v-bind:title="`You are subscribed to ${user.displayName}`">
+        <li v-if="isSubscribed" v-bind:title="`You are subscribed to ${user.displayName}`">
           <i class="fsif-sub"></i> Subscribed
         </li>
       
@@ -98,6 +98,9 @@
   import fetchPanels  from '../../../functions/fetch-panels'
   import fetchTeams   from '../../../functions/fetch-teams'
   import fetchSearch  from '../../../functions/fetch-search'
+
+  import checkFollowStatus       from '../../../functions/check-follow-status'
+  import checkSubscriptionStatus from '../../../functions/check-subscription-status'
   
   import follow   from '../../../functions/follow'
   import unfollow from '../../../functions/unfollow'
@@ -107,7 +110,7 @@
 
     components: {Channel, Loading, CategoryIcon},
 
-    props: ['getChannelID', 'userID'],
+    props: ['userID'],
 
     data: function() {
       return {
@@ -117,6 +120,7 @@
         panels:        [],
         teams:         [],
         isFollowing:   false,
+        isSubscribed:  false,
         followBtnText: 'Follow',
       }
     },
@@ -154,19 +158,24 @@
         const searchResults = await fetchSearch("users", name.toLowerCase())
         const id = searchResults.find(entry => entry.name.toLowerCase() == name.toLowerCase()).id
         
-        let user     = await fetchStream(id, this.userID)
+        let user = await fetchStream(id, this.userID)
 
         if (!user) user = await fetchChannel(id, this.userID)
         
-        const panels = await fetchPanels(name.toLowerCase())
-        const teams  = await fetchTeams({username: user.id})
-        
-        this.name          = name
-        this.user          = user
-        this.panels        = panels
-        this.teams         = teams
-        this.isFollowing   = user ? user.isFollowing : false
-        this.followBtnText = this.isFollowing ? 'Following' : 'Follow'
+        this.name = name
+        this.user = user
+
+        fetchPanels(name.toLowerCase()).then(panels => this.panels = panels)
+        fetchTeams({username: user.id}).then(teams  => this.teams = teams)
+      
+        checkFollowStatus(this.userID, this.user.id).then(success => {
+          this.isFollowing   = success
+          this.followBtnText = success ? 'Following' : 'Follow'
+        })
+
+        checkSubscriptionStatus(this.userID, this.user.id).then(success => {
+          this.isSubscribed = success
+        })
       }
     },
 

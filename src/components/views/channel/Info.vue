@@ -130,11 +130,11 @@
         this.followBtnText = 'Loading...'
 
         if (this.isFollowing) {
-          const success = await unfollow({userID: this.userID, channelID: this.user.id})
+          const success = await unfollow(this.userID, this.user.id)
           this.isFollowing = !success
           this.followBtnText = 'Follow'
         } else {
-          const success = await follow({userID: this.userID, channelID: this.user.id})
+          const success = await follow(this.userID, this.user.id)
           this.isFollowing = success
           this.followBtnText = 'Following'
         }
@@ -176,9 +176,6 @@
     },
 
     watch: {
-      channelID: function() {
-        console.log('ff', this.channelID)
-      },
       $route: async function() {
         this.isLoading = true
         await this.fetchData()

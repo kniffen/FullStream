@@ -1,8 +1,6 @@
-export default async function unfollow({ userID, username, channelID, categoryName }) {
+export default async function unfollow(userID, channelID) {
 
-  let uri = channelID ? 
-    `https://api.twitch.tv/kraken/users/${userID}/follows/channels/${channelID}` :
-    `https://api.twitch.tv/api/users/${username}/follows/games/unfollow?name=${categoryName}`
+  let uri = `https://api.twitch.tv/kraken/users/${userID}/follows/channels/${channelID}`
 
   const res = await fetch(uri, {
     method: 'DELETE',

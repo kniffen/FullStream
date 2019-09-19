@@ -1,8 +1,6 @@
-export default async function checkFollowStatus({ userID, username, channelID, categoryName }) {
+export default async function checkFollowStatus(userID, channelID) {
   
-  const uri = channelID ?
-    `https://api.twitch.tv/kraken/users/${userID}/follows/channels/${channelID}` :
-    `https://api.twitch.tv/api/users/${username}/follows/games/isFollowing?name=${categoryName}`
+  const uri = `https://api.twitch.tv/kraken/users/${userID}/follows/channels/${channelID}`
 
   const res = await fetch(uri, {
     headers: {

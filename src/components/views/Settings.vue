@@ -196,10 +196,10 @@
         const channel = this.channels.find(channel => channel.id == id)
 
         if (channel.isFollowing) {
-          const success = await unfollow({userID: this.userID, channelID: channel.id})
+          const success = await unfollow(this.userID, channel.id)
           channel.isFollowing = !success
         } else {
-          const success = await follow({userID: this.userID, channelID: channel.id})
+          const success = await follow(this.userID, channel.id)
           channel.isFollowing = success
         }
 

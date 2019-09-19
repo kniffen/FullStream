@@ -8,15 +8,6 @@
       <span class="title">
         <CategoryIcon v-bind:name="category.name" />{{category.name}}
       </span>
-
-      <div class="category-menu" v-if="username && category.id">
-        <button 
-          class="cta" 
-          @click="toggleFollow"
-          @mouseover="mouseOver"
-          @mouseout="mouseOut"
-        >{{followBtnText}}</button>
-      </div>
     </header>
 
     <div v-if="streams.length > 0" class="stream-list">
@@ -39,16 +30,11 @@
 
   import fetchStreams      from '../../functions/fetch-streams'
   import fetchCategory     from '../../functions/fetch-category'
-  import checkFollowStatus from '../../functions/check-follow-status'
-  import follow            from '../../functions/follow'
-  import unfollow          from '../../functions/unfollow'
 
   export default {
     name: 'Category',
 
     components: {Loading, Stream, CategoryIcon},
-
-    props: ['username'],
 
     data: function() {
       return {
@@ -56,8 +42,6 @@
         isLoadingMore: false,
         streams:       [],
         offset:        0,
-        isFollowing:   false,
-        followBtnText: 'Follow',
         category: {
           name: 'Category'
         }
@@ -75,28 +59,6 @@
         this.streams       = this.streams.concat(streams)
         this.offset        = streams.length >= 100 ? this.offset + 100 : -1
         this.isLoadingMore = false
-      },
-
-      toggleFollow: async function() {
-        this.followBtnText = 'Loading...'
-
-        if (this.isFollowing) {
-          const success = await unfollow({username: this.username, categoryName: this.category.name})
-          this.isFollowing = !success
-          this.followBtnText = 'Follow'
-        } else {
-          const success = await follow({username: this.username, categoryName: this.category.name})
-          this.isFollowing = success
-          this.followBtnText = 'Following'
-        }
-      },
-
-      mouseOver: function() {
-        this.followBtnText = this.isFollowing ? 'Unfollow' : 'Follow'
-      },
-
-      mouseOut: function() {
-        this.followBtnText  = this.isFollowing ? 'Following' : 'Follow'
       }
     },
 
@@ -109,9 +71,7 @@
       const category = await fetchCategory({name: this.$route.params.name})
       
       if (category) {
-        this.category      = category
-        this.isFollowing   = await checkFollowStatus({username: this.username, categoryName: category.name})
-        this.followBtnText = this.isFollowing ? 'Following' : 'Follow'
+        this.category = category
         await this.getStreams()
       } else {
         this.category.name = this.$route.params.name

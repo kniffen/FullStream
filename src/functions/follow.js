@@ -1,8 +1,6 @@
-export default async function follow({ userID, username, channelID, categoryName }) {
+export default async function follow(userID, channelID) {
 
-  let uri = channelID ? 
-    `https://api.twitch.tv/kraken/users/${userID}/follows/channels/${channelID}` :
-    `https://api.twitch.tv/api/users/${username}/follows/games/follow?name=${categoryName}`
+  let uri = `https://api.twitch.tv/kraken/users/${userID}/follows/channels/${channelID}`
 
   const res = await fetch(uri, {
     method: 'PUT',

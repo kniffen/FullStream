@@ -1,7 +1,7 @@
 <template>
   <div class="user">
     <router-link class="user-avatar" v-bind:to="`/channel/${name}`">
-      <img v-bind:src="avatar" />
+      <img v-lazy="avatar" />
     </router-link>
 
     <span>{{displayName}}</span>

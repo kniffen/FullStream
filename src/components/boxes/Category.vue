@@ -1,7 +1,7 @@
 <template>
   <div class="category">
     <router-link class="category-box-art" v-bind:to="`/category/${encodeURIComponent(name)}`">
-      <img v-bind:src="boxArt">
+      <img v-lazy="boxArt">
     </router-link>
 
     <div class="category-details">

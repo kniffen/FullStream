@@ -3,7 +3,7 @@
   <header>
     
     <div v-if="current.channel || current.video || current.clip" class="header-info">
-      <img class="header-image" v-bind:src="image" />
+      <img class="header-image" v-lazy="image" />
       <div>
         <div class="header-title">{{title}}</div>
         <div class="header-details">

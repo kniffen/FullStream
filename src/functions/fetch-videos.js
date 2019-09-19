@@ -37,7 +37,7 @@ export default async function fetchVideos({channelID, offset = 0, type = 'archiv
       length:          parseInt(vod.length) * 1000,
       views:           vod.views,
       thumbnail:       vod.preview.template || vod.preview,
-      animatedPreview: await checkImage(vod.animated_preview_url),
+      animatedPreview: vod.animated_preview_url,
       category:        {name: vod.game},
       channel: {
         id:          vod.channel._id,
@@ -55,15 +55,4 @@ export default async function fetchVideos({channelID, offset = 0, type = 'archiv
 
   return videos
 
-}
-
-function checkImage(url) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-
-    img.onload  = () => resolve(url)
-    img.onerror = () => resolve(null)
-
-    img.src = url
-  })
 }

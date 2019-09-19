@@ -134,7 +134,7 @@
 
       <div class="channels">
         <div class="channel" v-for="channel in channels" :id="channel.id">
-          <img v-bind:src="channel.avatar">
+          <img v-lazy="channel.avatar">
           <div>
             <router-link v-bind:to="`/channel/${channel.name}`">{{channel.displayName}}</router-link>
             <span>Followed since<br>{{formatDate(channel.followedSince.toLocaleString())}}</span>

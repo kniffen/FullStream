@@ -9,7 +9,7 @@
           <i class="fsif-play"></i>
         </router-link>
         
-        <img v-bind:src="
+        <img v-lazy="
           user.thumbnail ? 
           user.thumbnail.replace('{width}', '480').replace('{height}', '270') : 
           user.avatar"
@@ -68,11 +68,11 @@
         <h2 v-if="panel.title">{{panel.title}}</h2>
 
         <a v-if="panel.link && panel.image" v-bind:href="panel.link" target="_blank">
-          <img v-bind:src="panel.image" />
+          <img v-lazy="panel.image" />
         </a>
 
         <div v-else-if="panel.image">
-          <img v-bind:src="panel.image" />
+          <img v-lazy="panel.image" />
         </div>
 
         <div v-if="panel.html" v-html="panel.html" class="content"></div>

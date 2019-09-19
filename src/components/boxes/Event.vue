@@ -1,7 +1,7 @@
 <template>
   
   <div class="event">
-    <img v-bind:src="image.replace('{width}', '320').replace('{height}', '180')" />
+    <img v-lazy="image.replace('{width}', '320').replace('{height}', '180')" />
 
     <div class="event-details">
       <span>{{title}}</span>

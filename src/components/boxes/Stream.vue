@@ -8,10 +8,10 @@
 
       <img 
         class="stream-thumbnail" 
-        v-bind:src="`${thumbnail.replace('{width}', '240').replace('{height}', '135')}?timestamp=${Date.now()}`" />
+        v-lazy="`${thumbnail.replace('{width}', '240').replace('{height}', '135')}?timestamp=${Date.now()}`" />
 
       <div class="channel-identity">
-        <img v-bind:src="avatar">
+        <img v-lazy="avatar">
         <router-link v-bind:to="`/channel/${name}`">{{displayName}}</router-link>
       </div>
     </div>

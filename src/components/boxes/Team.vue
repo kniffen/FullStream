@@ -1,6 +1,6 @@
 <template>
   <router-link v-bind:class="`team${banner ? '' : ' no-banner'}`" v-bind:to="`/team/${name}`">
-    <img v-if="banner" class="banner" v-bind:src="banner">
+    <img v-if="banner" class="banner" v-lazy="banner">
     <span class="team-name">{{displayName}}</span>
   </router-link>
 </template>

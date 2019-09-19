@@ -6,12 +6,12 @@
         <i class="fsif-play"></i>
       </router-link>
 
-      <img v-bind:src="thumbnail.replace('{width}', '240').replace('{height}', '135')" />
+      <img v-lazy="thumbnail.replace('{width}', '240').replace('{height}', '135')" />
       
-      <img v-if="animatedPreview" v-bind:src="animatedPreview" class="video-animated-preview" />
+      <img v-if="animatedPreview" v-lazy="animatedPreview" class="video-animated-preview" />
 
       <div v-if="channel" class="channel-identity">
-        <img v-bind:src="channel.avatar">
+        <img v-lazy="channel.avatar">
         <router-link v-bind:to="`/channel/${channel.name}`">{{channel.displayName}}</router-link>
       </div>
     </div>

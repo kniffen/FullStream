@@ -143,8 +143,6 @@
           this.views        = channel.views
           this.viewers      = channel.viewers
           this.mediaStats   = channel.resolution && channel.fps ? `${channel.resolution}p${channel.fps}` : ''
-          this.isFollowing  = channel.isFollowing
-          this.isSubscribed = channel.isSubscribed
 
           checkFollowStatus(this.userID, channel.id)
             .then(success => this.isFollowing = success)
@@ -179,8 +177,6 @@
           this.views        = clip.views
           this.viewers      = 0
           this.mediaStats   = ''
-          this.isFollowing  = clip.channel.isFollowing
-          this.isSubscribed = clip.channel.isSubscribed
 
           checkFollowStatus(this.userID, clip.channel.id)
             .then(success => this.isFollowing = success)

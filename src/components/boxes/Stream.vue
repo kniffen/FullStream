@@ -72,10 +72,15 @@
       }
     },
 
-    mounted: function() {
-      if (this.started) {
-        this.uptime = moment(this.started).fromNow(true)
+    methods: {
+      setUptime: function() {
+        if (this.started) this.uptime = moment(this.started).fromNow(true)
       }
+    },
+
+    mounted: function() {
+      this.setUptime()
+      setInterval(() => this.setUptime(), 60000)
     }
 
   }

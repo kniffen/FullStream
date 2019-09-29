@@ -64,7 +64,7 @@
   export default {
     name: 'Following',
 
-    props: ['settings', 'userID'],
+    props: ['settings', 'userID', 'username'],
 
     components: {Loading, Stream, Category, User},
 

@@ -29,18 +29,21 @@
       return {
         isLoading:     true,
         isLoadingMore: false,
-        clips:         [],
+      }
+    },
+
+    asyncComputed: {
+      clips: async function() {
+        const { cursor, clips } = await fetchClips(this.$route.params.name)
+      
+        return clips.map(clip => {
+          clip.channel = clip.curator
+          return clip
+        })
       }
     },
 
     mounted: async function() {
-      const { cursor, clips } = await fetchClips(this.$route.params.name)
-      
-      this.clips = clips.map(clip => {
-        clip.channel = clip.curator
-        return clip
-      })
-
       this.isLoading = false
     }
   }

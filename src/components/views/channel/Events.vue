@@ -28,16 +28,20 @@
 
     data: function() {
       return {
-        isLoading: true,
-        events:    [],
+        isLoading: true
+      }
+    },
+
+    asyncComputed: {
+      events: async function() {
+        const searchResults = await fetchSearch("users", this.$route.params.name.toLowerCase())
+        const id = searchResults.find(entry => entry.name.toLowerCase() == this.$route.params.name.toLowerCase()).id
+
+        if (id) return await fetchEvents(id)
       }
     },
 
     mounted: async function() {
-      const searchResults = await fetchSearch("users", this.$route.params.name.toLowerCase())
-      const id = searchResults.find(entry => entry.name.toLowerCase() == this.$route.params.name.toLowerCase()).id
-
-      if (id) this.events = await fetchEvents(id)
       this.isLoading = false
     }
   }

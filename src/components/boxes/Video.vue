@@ -23,16 +23,16 @@
         <CategoryIcon v-bind:name="category.name" />{{category.name}}
       </router-link>
 
-      <span v-bind:title="`Published ${formatDate(published)}`">
-        <i class="fsif-calendar"></i>{{formatDate(published)}}
+      <span v-bind:title="`Published ${date}`">
+        <i class="fsif-calendar"></i>{{date}}
       </span>
 
       <div class="video-meta">
         <span v-bind:title="`${views.toLocaleString()} views`">
           <i class="fsif-eye"></i>{{views.toLocaleString()}}
         </span>
-        <span v-bind:title="`Duration ${formatLength(length)}`">
-          <i class="fsif-clock"></i>{{formatLength(length)}}
+        <span v-bind:title="`Duration ${duration}`">
+          <i class="fsif-clock"></i>{{duration}}
         </span>
       </div>
     </div>
@@ -64,12 +64,13 @@
 
     components: {CategoryIcon},
 
-    methods: {
-      formatDate: function(date) {
-        return moment(date).calendar()
+    computed: {
+      date: function() {
+        return moment(this.published).calendar()
       },
-      formatLength: function(length) {
-        return moment.utc(length).format('H:mm:ss')
+
+      duration: function() {
+        return moment.utc(this.length).format('H:mm:ss')
       }
     }
   }

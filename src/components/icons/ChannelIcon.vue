@@ -10,7 +10,6 @@
 
     data: function() {
       return {
-        iconFontClassName: 'fsif-camera',
         icons: [
           {
             className: 'bwana',
@@ -45,20 +44,10 @@
       }
     },
 
-    methods: {
-      setIcon: function() {
+    computed: {
+      iconFontClassName: function() {
         const icon = this.icons.find(icon => icon.channels.includes(this.name))
-        this.iconFontClassName = icon ? `fsif-${icon.className}` : 'fsif-camera'        
-      }
-    },
-
-    mounted: function() {
-      this.setIcon()
-    },
-
-    watch: {
-      name: function() {
-        this.setIcon()
+        return icon ? `fsif-${icon.className}` : 'fsif-camera' 
       }
     }
   }

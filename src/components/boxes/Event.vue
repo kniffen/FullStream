@@ -26,14 +26,10 @@
       'end',
     ],
 
-    data: function() {
-      return {
-        time: ''
+    computed: {
+      time: function() {
+        return moment.utc(this.start).local().calendar()
       }
-    },
-
-    mounted: function() {
-      this.time = moment.utc(this.start).local().calendar()
     }
   }
 </script>

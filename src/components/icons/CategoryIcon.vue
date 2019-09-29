@@ -10,7 +10,6 @@
 
     data: function() {
       return {
-        iconFontClassName: 'fsif-gamepad',
         icons: [
           {
             className: 'deadbydaylight',
@@ -250,20 +249,10 @@
       }
     },
 
-    methods: {
-      setIcon: function() {
+    computed: {
+      iconFontClassName: function() {
         const icon = this.icons.find(icon => icon.categories.includes(this.name))
-        this.iconFontClassName = icon ? `fsif-${icon.className}` : 'fsif-gamepad'
-      }
-    },
-
-    mounted: function() {
-      this.setIcon()
-    },
-
-    watch: {
-      name: function() {
-        this.setIcon()
+        return icon ? `fsif-${icon.className}` : 'fsif-gamepad'  
       }
     }
   }

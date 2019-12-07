@@ -65,7 +65,7 @@
   </Channel>
 
   <div v-else>
-    <p>Cound not find channel "{{name}}"</p>
+    <p>Could not find channel "{{name}}"</p>
   </div>
 
 </template>

@@ -178,9 +178,13 @@
 <style scoped>
   .channel-info {
     display: grid;
-    grid-template-columns: repeat(2, minmax(420px, 1fr));
+    grid-template-columns: 420px minmax(420px, 1fr);
     grid-gap: 1em;
     font-size: 1.2rem;
+  }
+
+  .live .channel-info {
+    grid-template-columns: repeat(2, minmax(420px, 1fr));
   }
   
   .channel-info ul {
@@ -193,6 +197,11 @@
   .channel-thumbnail {
     background-color: var(--color-bg-2);
     position: relative;
+  }
+
+  .channel-thumbnail img {
+    width: 100%;
+    height: auto;
   }
 
   .channel-link {

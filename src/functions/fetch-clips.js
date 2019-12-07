@@ -3,7 +3,7 @@ export default async function fetchClips(username) {
 
   const res = await fetch(`https://api.twitch.tv/kraken/clips/top?channel=${username}&limit=100`, {
     headers: {
-      'Client-ID': process.env.CLIENT_ID,
+      'Client-ID': process.env.VUE_APP_CLIENT_ID,
       'Accept': 'application/vnd.twitchtv.v5+json'
     }
   })

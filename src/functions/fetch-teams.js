@@ -8,7 +8,7 @@ export default async function fetchTeams({ username, offset = 0 }) {
 
   const res = await fetch(URI, {
     headers: {
-      'Client-ID': process.env.CLIENT_ID,
+      'Client-ID': process.env.VUE_APP_CLIENT_ID,
       'Accept': 'application/vnd.twitchtv.v5+json'
     }
   })

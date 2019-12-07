@@ -4,7 +4,7 @@ export default async function fetchFollowingHosting(username) {
 
   const res = await fetch(`https://api.twitch.tv/api/users/${username}/followed/hosting?limit=100`, {
     headers: {
-      'Client-ID': process.env.CLIENT_ID,
+      'Client-ID': process.env.VUE_APP_CLIENT_ID,
       'Accept': 'application/vnd.twitchtv.v5+json'
     }
   })

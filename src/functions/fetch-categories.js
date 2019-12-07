@@ -3,7 +3,7 @@ export default async function fetchCategories(offset = 0) {
   const categories = []
   const res = await fetch(`https://api.twitch.tv/kraken/games/top?limit=100&offset=${offset}`, {
     headers: {
-      'Client-ID': process.env.CLIENT_ID,
+      'Client-ID': process.env.VUE_APP_CLIENT_ID,
       'Accept': 'application/vnd.twitchtv.v5+json'
     }
   })

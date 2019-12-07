@@ -3,7 +3,7 @@ export default async function fetchFollowingCategories(username) {
   const categories = []
   const res = await fetch(`https://api.twitch.tv/api/users/${username}/follows/games?limit=100`, {
     headers: {
-      'Client-ID': process.env.CLIENT_ID,
+      'Client-ID': process.env.VUE_APP_CLIENT_ID,
       'Accept': 'application/vnd.twitchtv.v5+json'
     }
   })

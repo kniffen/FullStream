@@ -6,7 +6,7 @@ export default async function fetchVideos({channelID, offset = 0, type = 'archiv
   if (channelID) {
     res = await fetch(`https://api.twitch.tv/kraken/channels/${channelID}/videos?limit=100&offset=${offset}&broadcast_type=${type}`, {
       headers: {
-        'Client-ID': process.env.CLIENT_ID,
+        'Client-ID': process.env.VUE_APP_CLIENT_ID,
         'Accept': 'application/vnd.twitchtv.v5+json'
       }
     })
@@ -14,7 +14,7 @@ export default async function fetchVideos({channelID, offset = 0, type = 'archiv
   } else {
     res = await fetch(`https://api.twitch.tv/kraken/videos/top?limit=100&offset=${offset}`, {
       headers: {
-        'Client-ID': process.env.CLIENT_ID,
+        'Client-ID': process.env.VUE_APP_CLIENT_ID,
         'Accept': 'application/vnd.twitchtv.v5+json'
       }
     })

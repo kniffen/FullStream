@@ -15,7 +15,7 @@ export default async function fetchStreams({ category, offset = 0, channels, fea
 
   const res = await fetch(URI, {
     headers: {
-     'Client-ID': process.env.CLIENT_ID,
+     'Client-ID': process.env.VUE_APP_CLIENT_ID,
      'Accept': 'application/vnd.twitchtv.v5+json'
     }
   })

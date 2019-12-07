@@ -60,8 +60,8 @@
     data: function() {
       return {
         isLoading:       true,
-        clientID:        process.env.CLIENT_ID,
-        scopes:          process.env.SCOPES,
+        clientID:        process.env.VUE_APP_CLIENT_ID,
+        scopes:          process.env.VUE_APP_SCOPES,
         redirectURI:     window.location.origin,
         username:        '',
         userID:          '',

@@ -4,7 +4,7 @@ export default async function fetchEvents(channelID, offset = 0) {
 
   const res = await fetch(`https://api.twitch.tv/v5/channels/${channelID}/events`, {
     headers: {
-      'Client-ID': process.env.CLIENT_ID,
+      'Client-ID': process.env.VUE_APP_CLIENT_ID,
     }
   })
 

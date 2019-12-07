@@ -5,7 +5,7 @@ export default async function follow(userID, channelID) {
   const res = await fetch(uri, {
     method: 'PUT',
     headers: {  
-      'Client-ID': process.env.CLIENT_ID,
+      'Client-ID': process.env.VUE_APP_CLIENT_ID,
       'Authorization': `OAuth ${localStorage.token}`,
       'Accept': 'application/vnd.twitchtv.v5+json'
     }

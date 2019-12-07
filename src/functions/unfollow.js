@@ -5,7 +5,7 @@ export default async function unfollow(userID, channelID) {
   const res = await fetch(uri, {
     method: 'DELETE',
     headers: {  
-      'Client-ID': process.env.CLIENT_ID,
+      'Client-ID': process.env.VUE_APP_CLIENT_ID,
       'Authorization': `OAuth ${localStorage.token}`,
       'Accept': 'application/vnd.twitchtv.v5+json'
     }

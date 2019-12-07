@@ -4,7 +4,7 @@ export default async function fetchPanels(username) {
 
   const res = await fetch(`https://api.twitch.tv/api/channels/${username}/panels?limit=100`, {
     headers: {
-      'Client-ID': process.env.CLIENT_ID
+      'Client-ID': process.env.VUE_APP_CLIENT_ID
     }
   })
 

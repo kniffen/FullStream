@@ -3,7 +3,7 @@ export default async function(type, query) {
   const results = []
   const res = await fetch(`https://api.twitch.tv/kraken/search/${type}?query=${encodeURIComponent(query)}&limit=100&type=suggest`, {
     headers: {
-      'Client-ID': process.env.CLIENT_ID,
+      'Client-ID': process.env.VUE_APP_CLIENT_ID,
       'Accept': 'application/vnd.twitchtv.v5+json'
     }
   })

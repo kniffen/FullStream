@@ -3,7 +3,7 @@
   <Loading v-if="isLoading" />
 
   <Channel v-bind:name="name" v-else-if="user" v-bind:class="user.streamType" >
-    <section class="channel-card">
+    <section class="channel-info">
       <div class="channel-thumbnail">
         <router-link class="channel-link" v-bind:to="`/watch/${name}`">
           <i class="fsif-play"></i>
@@ -11,7 +11,7 @@
         
         <img v-lazy="
           user.thumbnail ? 
-          user.thumbnail.replace('{width}', '480').replace('{height}', '270') : 
+          user.thumbnail.replace('{width}', '1280').replace('{height}', '720') : 
           user.avatar"
         >
       </div>
@@ -62,22 +62,6 @@
       
       </ul>
     </section>
-
-    <section class="channel-panels" v-if="panels.length > 0">
-      <div class="channel-panel" v-for="panel in panels" :key="panel.id">
-        <h2 v-if="panel.title">{{panel.title}}</h2>
-
-        <a v-if="panel.link && panel.image" v-bind:href="panel.link" target="_blank">
-          <img v-lazy="panel.image" />
-        </a>
-
-        <div v-else-if="panel.image">
-          <img v-lazy="panel.image" />
-        </div>
-
-        <div v-if="panel.html" v-html="panel.html" class="content"></div>
-      </div>
-    </section>
   </Channel>
 
   <div v-else>
@@ -95,7 +79,6 @@
 
   import fetchChannel from '../../../functions/fetch-channel'
   import fetchStream  from '../../../functions/fetch-stream'
-  import fetchPanels  from '../../../functions/fetch-panels'
   import fetchTeams   from '../../../functions/fetch-teams'
   import fetchSearch  from '../../../functions/fetch-search'
 
@@ -117,7 +100,6 @@
         name:          this.$route.params.name,
         isLoading:     true,
         user:          null,
-        panels:        [],
         teams:         [],
         isFollowing:   false,
         isSubscribed:  false,
@@ -165,7 +147,6 @@
         this.name = name
         this.user = user
 
-        fetchPanels(name.toLowerCase()).then(panels => this.panels = panels)
         fetchTeams({username: user.id}).then(teams  => this.teams = teams)
       
         checkFollowStatus(this.userID, this.user.id).then(success => {
@@ -195,28 +176,23 @@
 </script>
 
 <style scoped>
-  .channel-card {
+  .channel-info {
     display: grid;
-    grid-template-columns: 200px minmax(0, 1fr);
+    grid-template-columns: repeat(2, minmax(420px, 1fr));
+    grid-gap: 1em;
     font-size: 1.2rem;
   }
-
-  .live .channel-card {
-    grid-template-columns: 480px minmax(0, 1fr);
-  }
-
-  .channel-card ul {
+  
+  .channel-info ul {
     list-style: none;
     display: grid;
-    grid-gap: .5em;
+    grid-gap: 1em;
     align-content: end;
   }
 
   .channel-thumbnail {
     background-color: var(--color-bg-2);
     position: relative;
-    min-height: 200px;
-    max-height: 270px;
   }
 
   .channel-link {
@@ -237,27 +213,16 @@
     opacity: 1;
   }
 
-  .channel-panels {
-    column-width: 320px;
-    column-gap: 1em;
-  }
-
-  .channel-panel {
-    display: grid;
-    grid-gap: .5em;
-    break-inside: avoid-column;
-    margin: 0 0 1em 0;
-  }
-
-  .channel-panel h2 {
-    margin: 0;
-  }
-
   .channel-teams > a:not(:last-child):after {
     content: ', ';
   }
+
+  .channel-buttons {
+    display: flex;
+    flex-wrap: wrap;
+  }
   
   .cta{
-    width: 86px;
+    margin-right: 1em;
   }
 </style>

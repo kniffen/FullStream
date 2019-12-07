@@ -1,7 +1,7 @@
-export default async function fetchFollowingCategories(username) {
+export default async function fetchFollowingCategories(channelID) {
 
   const categories = []
-  const res = await fetch(`https://api.twitch.tv/api/users/${username}/follows/games?limit=100`, {
+  const res = await fetch(`https://api.twitch.tv/kraken/users/${channelID}/follows/games?limit=100`, {
     headers: {
       'Client-ID': process.env.VUE_APP_CLIENT_ID,
       'Accept': 'application/vnd.twitchtv.v5+json'
@@ -14,10 +14,10 @@ export default async function fetchFollowingCategories(username) {
 
   data.follows.forEach(category => {
     categories.push({
-      id:      category._id,
-      name:    category.name,
-      boxArt:  category.box.medium,
-      viewers: category.popularity,
+      id:      category.game._id,
+      name:    category.game.name,
+      boxArt:  category.game.box.medium,
+      viewers: category.game.popularity,
     })
   })
 

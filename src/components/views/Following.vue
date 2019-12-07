@@ -5,13 +5,6 @@
   <div id="following" v-else>
     <h1><i class="fsif-heart"></i>Following</h1>
 
-    <section v-if="premieres.length > 0">
-      <h2>Premieres</h2>
-      <div class="stream-list">
-        <Stream v-for="_stream in premieres" :key="_stream.id" v-bind="_stream" />
-      </div>
-    </section>
-
     <section v-if="live.length > 0">
       <h2>Live</h2>
       <div class="stream-list">
@@ -71,7 +64,6 @@
     data: function() {
       return {
         isLoading:  true,
-        premieres:  [],
         live:       [],
         reruns:     [],
         hosted:     [],
@@ -87,13 +79,6 @@
           const live = streams.filter(_stream => _stream.streamType == 'live')
           live.sort((a, b) => b.viewers - a.viewers)
           this.live = live
-
-          // Premieres
-          if (this.settings.showPremieres) {
-            const premieres = streams.filter(_stream => _stream.streamType == 'premiere')
-            premieres.sort((a, b) => b.viewers - a.viewers)
-            this.premieres = premieres
-          }
 
           // Reruns
           if (this.settings.showReruns) {

@@ -49,14 +49,6 @@
       <h2>Following</h2>
       <form id="following-settings-form" class="settings-form">
         <div class="setting">
-          <span>Show premieres</span>
-          <label for="show-premieres" class="switch">
-            <input type="checkbox" id="show-premieres" v-model="settings.showPremieres" />
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="setting">
           <span>Show reruns</span>
           <label for="show-reruns" class="switch">
             <input type="checkbox" id="show-reruns" v-model="settings.showReruns" />

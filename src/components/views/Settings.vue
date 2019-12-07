@@ -57,14 +57,6 @@
         </div>
 
         <div class="setting">
-          <span>Show hosted</span>
-          <label for="show-hosted" class="switch">
-            <input type="checkbox" id="show-hosted" v-model="settings.showHosted" />
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="setting">
           <span>Show categories</span>
           <label for="show-categories" class="switch">
             <input type="checkbox" id="show-categories" v-model="settings.showCategories" />

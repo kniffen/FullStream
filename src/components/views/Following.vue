@@ -19,13 +19,6 @@
       </div>
     </section>
 
-    <section v-if="hosted.length > 0">
-      <h2>Hosted</h2>
-      <div class="stream-list">
-        <Stream v-for="_stream in hosted" :key="_stream.id" v-bind="_stream" />
-      </div>
-    </section>
-
     <section v-if="categories.length > 0">
       <h2>Categories</h2>
       <div class="category-list">
@@ -50,7 +43,6 @@
   import User     from '../boxes/User'
 
   import fetchFollowingStreams    from '../../functions/fetch-following-streams'
-  import fetchFollowingHosting    from '../../functions/fetch-following-hosting'
   import fetchFollowingCategories from '../../functions/fetch-following-categories'
   import fetchFollowingUsers      from '../../functions/fetch-following-users'
 
@@ -66,7 +58,6 @@
         isLoading:  true,
         live:       [],
         reruns:     [],
-        hosted:     [],
         categories: [],
         offline:    []
       }
@@ -87,14 +78,6 @@
             this.reruns = reruns
           }
         })
-
-        // Hosted
-        if (this.settings.showHosted) {
-          fetchFollowingHosting(this.username).then(hosted => {
-            hosted.sort((a, b) => b.viewers - a.viewers)
-            this.hosted = hosted
-          })
-        }
 
         // Categories
         if (this.settings.showCategories) {

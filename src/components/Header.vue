@@ -68,12 +68,18 @@
         <i class="fsif-chat"></i>
         <i class="fsif-chat-disabled"></i>
       </span>
-      
-      <router-link v-if="ctaPath" v-bind:to="ctaPath" class="main-toggle">
-        <i class="fsif-menu"></i>
+
+      <router-link v-if="current.channel && !$route.path.includes('/watch')" 
+                   v-bind:to="`/watch/${current.channel.name.toLowerCase()}`"
+                   class="menu-toggle"
+      >
         <i class="fsif-chevron"></i>
       </router-link>
 
+      <router-link v-if="$route.path.includes('/watch')" v-bind:to="hasToken ? '/following' : '/streams'">
+        <i class="fsif-menu"></i>
+      </router-link>
+      
       <span 
         v-if="current.channel || current.video || current.clip" 
         v-on:click="closeMedia"
@@ -106,7 +112,6 @@
     data: function() {
       return {
         hasToken:      localStorage.token ? true : false,
-        ctaPath:       '',
         uptime:        0,
         image:         '',
         title:         '',
@@ -194,36 +199,18 @@
         this.current.channel = null
         this.current.video   = null
         this.current.clip    = null
-        
-        if (!['watch', 'video', 'clip'].includes(this.ctaPath.split('/')[1])) {
-          this.$router.push(this.ctaPath)
-        }
+
+        this.$router.push(this.hasToken ? "/following" : "/streams")
       }
     },
 
     mounted: function() {
       this.parseCurrent()
-
-      if (['watch', 'video', 'clip'].includes(this.$route.path.split('/')[1])) {
-        this.ctaPath = '/streams'
-      }
-
       this.setUptime()
-
-      setInterval(() => {
-        this.setUptime()
-      }, 1000)
+      setInterval(this.setUptime, 1000)
     },
 
     watch: {
-      $route: function(to, from) {
-        if (['watch', 'video', 'clip'].includes(from.path.split('/')[1])) {
-          this.ctaPath = from.path
-        } else if (['watch', 'video', 'clip'].includes(to.path.split('/')[1])) {
-          this.ctaPath = from.path
-        }
-      },
-
       current: {
         handler: function() {
           this.parseCurrent()
@@ -276,56 +263,40 @@
 
   nav {
     display: flex;
-    align-items: center;
-    font-size: 1.6rem;
-    margin-right: .5em;
+    align-items: center;    
+    font-size: 1.8rem;
   }
 
   nav > * {
-    margin-left: 1em;
+    margin-right: .5em;
+    cursor: pointer;
   }
 
-  .chat-toggle,
-  .main-toggle {
+  .close-media:hover i,
+  .chat-toggle:hover i {
+    color: var(--color-blue);
+  }
+
+  .chat-visible .chat-toggle i:nth-child(2),
+  .chat-visible .chat-toggle:hover i:nth-child(1) {
+    display: none;
+  }
+
+  .chat-visible .chat-toggle:hover i:nth-child(2) {
     display: block;
-    position: relative;
-    cursor: pointer;
-    width: 1em;
-    height: 1em;
-    transition: all .2s ease-in-out;
   }
 
-  .chat-toggle:hover,
-  .main-toggle:hover {
-    color: var(--color-text);
-  }
-
-  .chat-toggle > i,
-  .main-toggle > i {
-    position: absolute;
-  }
-
-  .close-media {
-    cursor: pointer;
-  }
-
-  .chat-visible .chat-toggle .fsif-chat-disabled,
-  .chat-visible .chat-toggle:hover .fsif-chat 
-  .chat-hidden .chat-toggle .fsif-chat,
-  .chat-hidden .chat-toggle:hover .fsif-chat-disabled,
-  .main-toggle .fsif-chevron,
-  .main-toggle:hover .fsif-menu {
-    opacity: 0;
-  }
-
-  .chat-visible .chat-toggle:hover .fsif-chat-disabled,
-  .chat-hidden .chat-toggle:hover .fsif-chat,
-  .main-toggle:hover .fsif-chevron {
-    opacity: 1;
-  }
-  
-  .main-visible .main-toggle .fsif-chevron {
+  .menu-toggle {
     transform: rotate(180deg);
   }
 
+  nav > *:not(.cta-twitch) {
+    position: relative;
+    width: 1em;
+    height: 1em;
+  }
+
+  nav > *:not(.cta-twitch) i {
+    position: absolute;
+  }
 </style>

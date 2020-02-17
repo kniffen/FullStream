@@ -6,12 +6,19 @@
         <i class="fsif-play"></i>
       </router-link>
 
-      <img 
+      <img
+        v-if="isLazy" 
         class="stream-thumbnail" 
         v-lazy="`${thumbnail.replace('{width}', '240').replace('{height}', '135')}?timestamp=${Date.now()}`" />
 
+      <img
+        v-if="!isLazy" 
+        class="stream-thumbnail" 
+        :src="`${thumbnail.replace('{width}', '240').replace('{height}', '135')}?timestamp=${Date.now()}`" />
+
+
       <div class="channel-identity">
-        <img v-lazy="avatar">
+        <img :src="avatar">
         <router-link v-bind:to="`/channel/${name}`">{{displayName}}</router-link>
       </div>
     </div>
@@ -63,12 +70,14 @@
       'category',
       'viewers',
       'hosts',
-      'started'
+      'started',
+      'lazy'
     ],
 
     data: function() {
       return {
-        uptime: ''
+        uptime: '',
+        isLazy: this.lazy !== undefined ? this.lazy : true
       }
     },
 

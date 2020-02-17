@@ -8,7 +8,7 @@
     <section v-if="live.length > 0">
       <h2>Live</h2>
       <div class="stream-list">
-        <Stream v-for="_stream in live" :key="_stream.id" v-bind="_stream" />
+        <Stream v-for="_stream in live" :key="_stream.id" v-bind="_stream" :lazy="false"/>
       </div>
     </section>
 

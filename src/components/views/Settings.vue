@@ -1,8 +1,6 @@
 <template>
 
-  <Loading v-if="isLoading" />
-
-  <div id="settings" v-else>
+  <div id="settings">
     <h1><i class="fsif-cogs"></i>Settings</h1>
 
     <section>

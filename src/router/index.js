@@ -59,6 +59,12 @@ const router = new Router({
       meta: { title: 'Categories' }
     },
     {
+      path:      '/categories/page/:page',
+      name:      'CategoriesPage',
+      component: Categories,
+      meta: { title: 'Categories' }
+    },
+    {
       path:     '/streams',
       name:     'StreamsRedirect',
       redirect: '/streams/featured',
@@ -71,6 +77,12 @@ const router = new Router({
       meta: { title: 'Streams' }
     },
     {
+      path:      '/streams/:type/page/:page',
+      name:      'StreamsPage',
+      component: Streams,
+      meta: { title: 'Streams' }
+    },
+    {
       path:      '/teams',
       name:      'Teams',
       component: Teams,
@@ -79,6 +91,12 @@ const router = new Router({
     {
       path:      '/videos',
       name:      'Videos',
+      component: Videos,
+      meta: { title: 'Videos' }
+    },
+    {
+      path:      '/videos/page/:page',
+      name:      'VideosPage',
       component: Videos,
       meta: { title: 'Videos' }
     },
@@ -106,6 +124,11 @@ const router = new Router({
       component: Category,
     },
     {
+      path:      '/category/:name/page/:page',
+      name:      'CategoryPage',
+      component: Category,
+    },
+    {
       path:      '/team/:name',
       name:      'Team',
       component: Team,
@@ -118,6 +141,11 @@ const router = new Router({
     {
       path:      '/channel/:name/videos/:type',
       name:      'ChannelVideos',
+      component: ChannelVideos,
+    },
+    {
+      path:      '/channel/:name/videos/:type/page/:page',
+      name:      'ChannelVideosPage',
       component: ChannelVideos,
     },
     {
@@ -136,10 +164,20 @@ const router = new Router({
       component: ChannelFollowers,
     },
     {
+      path:      '/channel/:name/followers/page/:page',
+      name:      'ChannelFollowersPage',
+      component: ChannelFollowers,
+    },
+    {
       path:      '/channel/:name/following',
       name:      'ChannelFollowing',
       component: ChannelFollowing,
     },
+    {
+      path:      '/channel/:name/following/page/:page',
+      name:      'ChannelFollowingPage',
+      component: ChannelFollowing,
+    }
   ]
 })
 

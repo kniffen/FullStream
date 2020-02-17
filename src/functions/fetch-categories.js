@@ -1,6 +1,6 @@
 export default async function fetchCategories(offset = 0) {
 
-  const categories = []
+  const categories = {pages: 0, items: []}
   const res = await fetch(`https://api.twitch.tv/kraken/games/top?limit=100&offset=${offset}`, {
     headers: {
       'Client-ID': process.env.VUE_APP_CLIENT_ID,
@@ -12,15 +12,15 @@ export default async function fetchCategories(offset = 0) {
 
   const data = await res.json()
 
-  data.top.forEach(category => {
-    categories.push({
-      id:      category.game._id,
-      name:    category.game.name,
-      boxArt:  category.game.box.medium,
-      viewers: category.viewers,
-      streams: category.channels,
-    })
-  })
+  categories.pages = Math.ceil(data._total / 100) || 0
+
+  categories.items = data.top.map(category => ({
+    id:      category.game._id,
+    name:    category.game.name,
+    boxArt:  category.game.box.medium,
+    viewers: category.viewers,
+    streams: category.channels,
+  }))
 
   return categories
 

@@ -3,6 +3,7 @@
   <Loading v-if="isLoading" />
 
   <div id="streams" v-else>
+
     <header>
       <h1><i class="fsif-camera"></i>streams</h1>
 
@@ -16,63 +17,62 @@
       <Stream v-for="_stream in streams" :key="_stream.id" v-bind="_stream" />
     </div>
 
-    <button 
-      v-if="offset >= 0" 
-      v-on:click="getStreams"
-      class="load-more"
-    >{{isLoadingMore ? 'Loading...': 'Load more'}}</button>
-  
+    <Pagination :page="page" :pages="pages" :path="`/streams/${type}`"/>
   </div>
 </template>
 
 <script>
-  import Loading from '../Loading'
-  import Stream  from '../boxes/Stream'
+  import Loading    from '../Loading'
+  import Stream     from '../boxes/Stream'
+  import Pagination from '../elements/Pagination'
 
   import fetchStreams from '../../functions/fetch-streams'
 
   export default {
     name: 'Streams',
 
-    components: {Loading, Stream},
+    components: {Loading, Stream, Pagination},
 
     data: function() {
       return {
-        isLoading:     true,
-        isLoadingMore: false,
-        streams:       [],
-        offset:        0,
+        isLoading: true,
+        streams:   [],
+        pages:     0,
       }
     },
 
     methods: {
-      getStreams: async function() {
-        this.isLoadingMore = true
+      setStreams: async function() {
+        this.isLoading = true
 
-        const streams = await fetchStreams({offset: this.offset, featured: this.$route.params.type == 'featured'}).then(streams => 
-          streams.filter(_stream => !this.streams.find(existing => existing.id == _stream.id))
-        )
-
-        this.streams       = this.streams.concat(streams)
-        this.offset        = streams.length >= 100 ? this.offset + streams.length : -1
-        this.isLoadingMore = false
+        fetchStreams({
+          offset:   this.page > 0 ? this.page * 100 : 0,
+          featured: this.type == 'featured'
+        })
+          .then(streams => {
+            this.pages     = streams.pages
+            this.streams   = streams.items
+            this.isLoading = false
+          })
       }
     },
 
-    mounted: async function() {
-      await this.getStreams()
-      this.isLoading = false
+    mounted: function() {
+      this.setStreams()
+    },
+
+    computed: {
+      type: function() {
+        return this.$route.params.type
+      },
+      page: function() {
+        return this.$route.params.page - 1 || 0
+      }
     },
 
     watch: {
-      $route: async function() {
-        this.isLoading = true
-        this.streams   = []
-        this.offset    = 0
-        
-        await this.getStreams()
-        
-        this.isLoading = false
+      $route: function() {
+        this.setStreams()
       }
     }
   }

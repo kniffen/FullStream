@@ -1,6 +1,6 @@
 <template>
   
-  <Channel v-bind:name="$route.params.name">
+  <Channel v-bind:name="channelName">
     <Loading v-if="isLoading" />
 
     <div v-else>
@@ -8,51 +8,65 @@
         <User v-for="user in users" :key="user.id" v-bind="user" />
       </div>
 
-      <button class="load-more" v-if="offset >= 0" v-on:click="getUsers">{{isLoadingMore ? 'Loading...' : 'Load more'}}</button>
+      <Pagination :page="page" :pages="pages" :path="`/channel/${channelName}/following`"/>
     </div>
   </Channel>
 
 </template>
 
 <script>
-  import Loading from '../../Loading'
-  import Channel from '../Channel'
-  import User    from '../../boxes/User'
+  import Loading    from '../../Loading'
+  import Channel    from '../Channel'
+  import User       from '../../boxes/User'
+  import Pagination from '../../elements/Pagination'
 
   import fetchFollowingUsers from '../../../functions/fetch-following-users'
-  import fetchSearch  from '../../../functions/fetch-search'
+  import fetchSearch         from '../../../functions/fetch-search'
 
   export default {
     name: 'ChannelFollowing',
 
-    components: {Loading, Channel, User},
+    components: {Loading, Channel, User, Pagination},
 
     data: function() {
       return {
-        isLoading:     true,
-        isLoadingMore: true,
-        users:         [],
-        offset:        0
+        isLoading: true,
+        users:     [],
+        pages:     0
+      }
+    },
+
+    computed: {
+      channelName: function() {
+        return this.$route.params.name
+      },
+      page: function() {
+        return this.$route.params.page > 1 ? this.$route.params.page - 1 : 0
       }
     },
 
     methods: {
-      getUsers: async function() {
-        this.isLoadingMore = true
-        
-        const searchResults = await fetchSearch("users", this.$route.params.name.toLowerCase())
-        const user = searchResults.find(entry => entry.name.toLowerCase() == this.$route.params.name.toLowerCase())
-        const users = await fetchFollowingUsers(user.id, this.offset)
+      setUsers: async function() {
+        this.isLoading = true
 
-        this.users         = this.users.concat(users)
-        this.offset        = users.length >= 100 ? this.offset + users.length : -1
-        this.isLoadingMore = false
+        const searchResults = await fetchSearch("users", this.channelName.toLowerCase())
+        const user          = searchResults.find(entry => entry.name.toLowerCase() == this.channelName.toLowerCase())
+        const users         = await fetchFollowingUsers(user.id, this.page * 100)
+        
+        this.pages     = users.pages
+        this.users     = users.items
+        this.isLoading = false
       }
     },
 
-    mounted: async function() {
-      await this.getUsers()
-      this.isLoading = false
+    mounted: function() {
+      this.setUsers()
+    },
+
+    watch: {
+      $route: function() {
+        this.setUsers()
+      }
     }
   }
 </script>

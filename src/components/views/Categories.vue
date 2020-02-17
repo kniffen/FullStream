@@ -3,54 +3,62 @@
   <Loading v-if="isLoading" />
 
   <div id="categories" v-else>
-    <h1><i class="fsif-gamepad"></i>Top Categories</h1>
+    <h1><i class="fsif-gamepad"></i>Categories</h1>
 
     <div class="category-list">
       <Category v-for="category in categories" :key="category.id" v-bind="category" />
     </div>
 
-    <button class="load-more" v-if="offset >= 0" v-on:click="getCategories">{{isLoadingMore ? 'Loading...' : 'Load more'}}</button>
+    <Pagination :page="page" :pages="pages" path="/categories" />
    </div>
 </template>
 
 <script>
-  import Loading  from '../Loading'
-  import Category from '../boxes/Category'
+  import Loading    from '../Loading'
+  import Category   from '../boxes/Category'
+  import Pagination from '../elements/Pagination'
 
   import fetchCategories from '../../functions/fetch-categories'
 
   export default {
     name: 'Categories',
 
-    components: {Loading, Category},
+    components: {Loading, Category, Pagination},
 
     data: function() {
       return {
-        isLoading:     true,
-        isLoadingMore: false,
-        categories:    [],
-        offset:        0
+        isLoading:  true,
+        categories: [],
+        pages: 0
+      }
+    },
+
+    computed: {
+      page: function() {
+        return this.$route.params.page > 1 ? this.$route.params.page - 1 : 0
       }
     },
 
     methods: {
-      getCategories: async function() {
-        this.isLoadingMore = true
-
-        const categories   = await fetchCategories(this.offset)
+      setCategories: function() {
+        this.isLoading  = true
         
-        this.categories = 
-          this.categories.concat(categories.filter(category => !this.categories.find(existing => existing.id == category.id)))
-
-
-        this.offset += categories.length > 0 ? this.offset + categories.length : -1
-        this.isLoadingMore = false
+        fetchCategories(this.page * 100).then(categories => {
+          this.pages      = categories.pages
+          this.categories = categories.items
+          this.isLoading  = false
+        })
       }
     },
 
-    mounted: async function() {
-      await this.getCategories()
-      this.isLoading  = false
+    mounted: function() {
+      this.setCategories()
+    },
+
+    watch: {
+      $route: function() {
+        this.setCategories()
+      }
     }
   }
 </script>

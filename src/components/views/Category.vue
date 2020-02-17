@@ -3,7 +3,6 @@
   <Loading v-if="isLoading" />
 
   <div class="category" v-else>
-  
     <header>
       <span class="title">
         <CategoryIcon v-bind:name="category.name" />{{category.name}}
@@ -14,12 +13,7 @@
       <Stream v-for="_stream in streams" :key="_stream.id" v-bind="_stream" />
     </div>
 
-    <button 
-      class="load-more" 
-      v-if="streams.length > 0 && offset >= 0" 
-      v-on:click="getStreams"
-    >{{isLoadingMore ? 'Loading...' : 'Load more'}}</button>
-  
+    <Pagination :page="page" :pages="pages" :path="`/category/${category.name}`"/>
   </div>
 </template>
 
@@ -27,6 +21,7 @@
   import Loading      from '../Loading'
   import Stream       from '../boxes/Stream'
   import CategoryIcon from '../icons/CategoryIcon'
+  import Pagination   from '../elements/Pagination'
 
   import fetchStreams      from '../../functions/fetch-streams'
   import fetchCategory     from '../../functions/fetch-category'
@@ -34,14 +29,13 @@
   export default {
     name: 'Category',
 
-    components: {Loading, Stream, CategoryIcon},
+    components: {Loading, Stream, CategoryIcon, Pagination},
 
     data: function() {
       return {
         isLoading:     true,
-        isLoadingMore: false,
         streams:       [],
-        offset:        0,
+        pages:         0,
         category: {
           name: 'Category'
         }
@@ -49,35 +43,39 @@
     },
 
     methods: {
-      getStreams: async function() {
-        this.isLoadingMore = true
+      setStreams: async function() {
+        this.isLoading = true
 
-        const streams = 
-          await fetchStreams({category: this.category.name, offset: this.offset})
-            .then(streams => streams.filter(_stream => !this.streams.find(existing => existing.id == _stream.id)))
-
-        this.streams       = this.streams.concat(streams)
-        this.offset        = streams.length >= 100 ? this.offset + 100 : -1
-        this.isLoadingMore = false
+        fetchStreams({category: this.category.name, offset: this.page * 100})
+          .then(streams => {
+            this.pages     = streams.pages
+            this.streams   = streams.items
+            this.isLoading = false
+          })
       }
     },
 
     mounted: async function() {
-      if (!this.$route.params.name) {
-        this.isLoading = false
-        return
-      }
-
       const category = await fetchCategory({name: this.$route.params.name})
       
       if (category) {
         this.category = category
-        await this.getStreams()
+        this.setStreams()
       } else {
         this.category.name = this.$route.params.name
       }
+    },
 
-      this.isLoading = false
+    computed: {
+      page: function() {
+        return this.$route.params.page > 1 ? this.$route.params.page - 1 : 0
+      }
+    },
+
+    watch: {
+      $route: function() {
+        this.setStreams()
+      }
     }
   }
 </script>
@@ -86,6 +84,7 @@
   .category {
     display: grid;
     grid-gap: 2em;
+    margin-bottom: 2em;
     align-content: start;
   }
 

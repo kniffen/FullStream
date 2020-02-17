@@ -1,6 +1,6 @@
 export default async function fetchStreams({ category, offset = 0, channels, featured }) {
 
-  const streams = []
+  const streams = {pages: 0, items: []}
 
   let URI =  'https://api.twitch.tv/kraken/streams'
 
@@ -23,33 +23,34 @@ export default async function fetchStreams({ category, offset = 0, channels, fea
   if (res.status != 200) return streams
 
   const data = await res.json()
+  const arr  = data.streams || data.featured
 
-  const arr = data.streams || data.featured
+  streams.pages = Math.ceil(data._total / 100) || 0
 
-  arr.forEach(item => {
+  streams.items = arr.map((item) => {
     const channel = featured ? item.stream.channel : item.channel
-    const _stream  = featured ? item.stream         : item
+    const stream  = featured ? item.stream         : item
 
-    streams.push({
+    return {
       id:          channel._id,
-      streamID:    _stream._id,
+      streamID:    stream._id,
       name:        channel.name,
       displayName: channel.display_name,
       followers:   channel.followers,
       avatar:      channel.logo,
       isPartner:   channel.partner,
       title:       channel.status,
-      streamType:  _stream.stream_type,
-      thumbnail:   featured ? item.image : _stream.preview.template,
-      viewers:     _stream.viewers,
+      streamType:  stream.stream_type,
+      thumbnail:   featured ? item.image : stream.preview.template,
+      viewers:     stream.viewers,
       views:       channel.views,
-      started:     _stream.created_at, 
-      resolution:  Math.floor(_stream.video_height),
-      fps:         Math.floor(_stream.average_fps),
+      started:     stream.created_at, 
+      resolution:  Math.floor(stream.video_height),
+      fps:         Math.floor(stream.average_fps),
       category: {
-        name: _stream.game
+        name: stream.game
       }
-    })
+    }
   })
 
   return streams

@@ -8,16 +8,18 @@
         <Video v-for="video in videos" v-if="video.isPublic" :key="video.id" v-bind="video" />
       </div>
 
-      <button class="load-more" v-if="offset >= 0" v-on:click="fetchAndParseVideos(false)">{{isLoadingMore ? 'Loading...' : 'Load more'}}</button>
+      <Pagination :page="page" :pages="pages" :path="`/channel/${channelName}/videos/${type}`" />
     </div>
+
   </Channel>
 
 </template>
 
 <script>
-  import Loading from '../../Loading'
-  import Channel from '../Channel'
-  import Video   from '../../boxes/Video'
+  import Loading    from '../../Loading'
+  import Channel    from '../Channel'
+  import Video      from '../../boxes/Video'
+  import Pagination from '../../elements/Pagination'
 
   import fetchVideos from '../../../functions/fetch-videos'
   import fetchSearch from '../../../functions/fetch-search'
@@ -25,54 +27,54 @@
   export default {
     name: 'ChannelArchive',
 
-    components: {Loading, Channel, Video},
+    components: {Loading, Channel, Video, Pagination},
 
     data: function() {
       return {
-        isLoading:     true,
-        isLoadingMore: false,
-        videos:        [],
-        offset:        0,
+        isLoading: true,
+        videos:    [],
+        pages:     0,
       }
     },
 
     methods: {
-      fetchAndParseVideos: async function(reset) {
-        this.isLoadingMore = true
+      setVideos: async function() {
+        this.isLoading = true
 
-        if (reset) {
-          this.videos    = []
-          this.offset    = 0
-          this.isLoading = true
-        }
-
-        const searchResults = await fetchSearch("users", this.$route.params.name.toLowerCase())
-        const user = searchResults.find(entry => entry.name.toLowerCase() == this.$route.params.name.toLowerCase())
+        const searchResults = await fetchSearch("users", this.channelName.toLowerCase())
+        const user = searchResults.find(entry => entry.name.toLowerCase() == this.channelName.toLowerCase())
 
         const videos = await fetchVideos({
           channelID: user.id,
-          offset:    this.offset,
+          offset:    this.page * 100,
           type:      this.$route.params.type,
         })
 
-        this.videos = this.videos.concat(videos.map(video => {
-          video.channel = null
-          return video
-        }))
+        this.pages     = videos.pages
+        this.videos    = videos.items
+        this.isLoading = false
+      }
+    },
 
-        this.offset        = videos.length >= 100 ? this.offset + videos.length : -1
-        this.isLoading     = false
-        this.isLoadingMore = false
+    computed: {
+      type: function() {
+        return this.$route.params.type
+      },
+      channelName: function() {
+        return this.$route.params.name
+      },
+      page: function() {
+        return this.$route.params.page > 1 ? this.$route.params.page - 1 : 0
       }
     },
 
     mounted: function() {
-      this.fetchAndParseVideos()
+      this.setVideos()
     },
 
     watch: {
-      $route: function(to, from) {
-        this.fetchAndParseVideos(true)
+      $route: function() {
+        this.setVideos()
       }
     }
   }

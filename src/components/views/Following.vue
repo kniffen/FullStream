@@ -104,10 +104,10 @@
 
             if (users.length <= 0) return
 
-            fetchFollowingUsers(this.userID, offset+users.length).then(users => parseUsers(users, offset+users.length))
+            fetchFollowingUsers(this.userID, offset+users.length).then(users => parseUsers(users.items, offset+users.length))
           }
 
-          fetchFollowingUsers(this.userID, 0).then(users => parseUsers(users, 0))
+          fetchFollowingUsers(this.userID, 0).then(users => parseUsers(users.items, 0))
         }
       }
     },

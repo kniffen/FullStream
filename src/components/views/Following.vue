@@ -82,8 +82,11 @@
         // Categories
         if (this.settings.showCategories) {
           fetchFollowingCategories(this.userID).then(categories => {
-            categories.sort((a, b) => b.viewers - a.viewers)
-            this.categories = categories.filter(cat => cat.viewers > 0)
+            this.categories = categories.sort((a, b) => {
+              if(a.name < b.name) return -1
+              if(a.name > b.name) return  1
+              return 0
+            })
           })
         }
 

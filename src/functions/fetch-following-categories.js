@@ -16,8 +16,7 @@ export default async function fetchFollowingCategories(channelID) {
     categories.push({
       id:      category.game._id,
       name:    category.game.name,
-      boxArt:  category.game.box.medium,
-      viewers: category.game.popularity,
+      boxArt:  category.game.box.medium
     })
   })
 

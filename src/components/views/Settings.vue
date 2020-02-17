@@ -195,15 +195,10 @@
     },
 
     mounted: async function() {
-      if (!this.username) {
-        this.isLoading = false
-        return
-      }
-
       for (let offset = 0; 0 < 1000; offset += 100) {
         const channels = await fetchFollowingUsers(this.userID, offset)
         
-        channels.forEach(channel => {
+        channels.items.forEach(channel => {
           if (!this.channels.find(existing => existing.id == channel.id)) {
             this.channels.push({
               avatar:        channel.avatar,
@@ -216,7 +211,7 @@
           }
         })
 
-        if (channels.length < 100) break
+        if (channels.items.length < 100) break
       }
 
       this.channels.sort((a, b) => {
@@ -224,8 +219,6 @@
         if (a.name > b.name) return 1
         return 0
       })
-
-      this.isLoading = false
     },
 
     watch: {

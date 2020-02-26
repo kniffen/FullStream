@@ -8,7 +8,7 @@
         <Video v-for="video in videos" v-if="video.isPublic" :key="video.id" v-bind="video" />
       </div>
 
-      <Pagination :page="page" :pages="pages" :path="`/channel/${channelName}/videos/${type}`" />
+      <Pagination :page="page" :hasMore="videos.length > 95" :path="`/channel/${channelName}/videos/${type}`"/>
     </div>
 
   </Channel>
@@ -32,8 +32,7 @@
     data: function() {
       return {
         isLoading: true,
-        videos:    [],
-        pages:     0,
+        videos:    []
       }
     },
 
@@ -50,7 +49,6 @@
           type:      this.$route.params.type,
         })
 
-        this.pages     = videos.pages
         this.videos    = videos.items
         this.isLoading = false
       }

@@ -10,10 +10,10 @@
     </header>
 
     <div v-if="streams.length > 0" class="stream-list">
-      <Stream v-for="_stream in streams" :key="_stream.id" v-bind="_stream" />
+      <Stream v-for="stream in streams" :key="stream.id" v-bind="stream" />
     </div>
 
-    <Pagination :page="page" :pages="pages" :path="`/category/${category.name}`"/>
+    <Pagination :page="page" :hasMore="streams.length > 90" :path="`/category/${category.name}`"/>
   </div>
 </template>
 
@@ -35,7 +35,6 @@
       return {
         isLoading:     true,
         streams:       [],
-        pages:         0,
         category: {
           name: 'Category'
         }
@@ -45,13 +44,8 @@
     methods: {
       setStreams: async function() {
         this.isLoading = true
-
-        fetchStreams({category: this.category.name, offset: this.page * 100})
-          .then(streams => {
-            this.pages     = streams.pages
-            this.streams   = streams.items
-            this.isLoading = false
-          })
+        this.streams   = await fetchStreams({category: this.category.name, offset: this.page * 100})
+        this.isLoading = false
       }
     },
 

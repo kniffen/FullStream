@@ -8,7 +8,7 @@
         <User v-for="user in users" :key="user.id" v-bind="user" />
       </div>
 
-      <Pagination :page="page" :pages="pages" :path="`/channel/${channelName}/followers`" />
+      <Pagination :page="page" :hasMore="users.length > 95" :path="`/channel/${channelName}/followers`"/>
     </div>
   </Channel>
 
@@ -31,8 +31,7 @@
     data: function() {
       return {
         isLoading:     true,
-        users:         [],
-        pages:         0
+        users:         []
       }
     },
 
@@ -52,8 +51,7 @@
         const searchResults = await fetchSearch("users", this.channelName.toLowerCase())
         const user          = searchResults.find(entry => entry.name.toLowerCase() == this.channelName.toLowerCase())
         const users         = await fetchChannelFollowers(user.id, this.page * 100)
-        
-        this.pages     = users.pages
+
         this.users     = users.items
         this.isLoading = false
       }

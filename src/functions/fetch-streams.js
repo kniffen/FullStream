@@ -1,6 +1,6 @@
 export default async function fetchStreams({ category, offset = 0, channels, featured }) {
 
-  const streams = {pages: 0, items: []}
+  let streams = []
 
   let URI =  'https://api.twitch.tv/kraken/streams'
 
@@ -25,9 +25,7 @@ export default async function fetchStreams({ category, offset = 0, channels, fea
   const data = await res.json()
   const arr  = data.streams || data.featured
 
-  streams.pages = Math.ceil(data._total / 100) || 0
-
-  streams.items = arr.map((item) => {
+  streams = arr.map((item) => {
     const channel = featured ? item.stream.channel : item.channel
     const stream  = featured ? item.stream         : item
 

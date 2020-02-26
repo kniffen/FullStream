@@ -9,7 +9,7 @@
       <Video v-for="video in videos" :key="video.id" v-bind="video" />
     </div>
 
-    <Pagination :page="page" :pages="videos.length >= 100 ? 2 : 1" path="/videos" :simple="true"/>
+    <Pagination :page="page" :hasMore="videos.length > 95" path="/videos"/>
   </div>
 
 </template>

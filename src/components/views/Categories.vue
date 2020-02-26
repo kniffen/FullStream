@@ -9,7 +9,7 @@
       <Category v-for="category in categories" :key="category.id" v-bind="category" />
     </div>
 
-    <Pagination :page="page" :pages="pages" path="/categories" />
+    <Pagination :page="page" :hasMore="categories.length > 95" path="/categories" />
    </div>
 </template>
 
@@ -28,8 +28,7 @@
     data: function() {
       return {
         isLoading:  true,
-        categories: [],
-        pages: 0
+        categories: []
       }
     },
 
@@ -44,7 +43,6 @@
         this.isLoading  = true
         
         fetchCategories(this.page * 100).then(categories => {
-          this.pages      = categories.pages
           this.categories = categories.items
           this.isLoading  = false
         })

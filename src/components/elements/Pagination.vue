@@ -1,17 +1,8 @@
 <template>
-  <div class="pagination pagination-simple" v-if="simple || pages > 30">
+  <div class="pagination pagination-simple">
     <router-link v-if="page == 1" :to="path">Prev</router-link>
-    <router-link v-if="page  > 1" :to="`${path}/page/${page}`">Prev</router-link>
-    <router-link v-if="pages > 1 && page < pages - 1" :to="`${path}/page/${page + 2}`">Next</router-link>
-  </div>
-
-  <div class="pagination" v-else-if="pages > 1">
-    <router-link 
-      v-for="i in pages" 
-      :class="i - 1 == page ? `current` : ``"
-      :to="i <= 1 ? path : `${path}/page/${i}`"
-      :key="`page-${i}`"
-    >{{i}}</router-link>
+    <router-link v-if="page >= 2" :to="`${path}/page/${page}`">Prev</router-link>
+    <router-link v-if="hasMore" :to="`${path}/page/${page+2}`">Next</router-link>
   </div>
 </template>
 
@@ -19,7 +10,7 @@
   export default {
     name: "Pagination",
 
-    props: ["page", "pages", "path", "simple"]
+    props: ["page", "path", "simple", "hasMore"]
   }
 </script>
 

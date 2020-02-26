@@ -14,10 +14,10 @@
     </header>
 
     <div v-if="streams.length > 0" class="stream-list">
-      <Stream v-for="_stream in streams" :key="_stream.id" v-bind="_stream" />
+      <Stream v-for="stream in streams" :key="stream.id" v-bind="stream" />
     </div>
 
-    <Pagination :page="page" :pages="pages" :path="`/streams/${type}`"/>
+    <Pagination :page="page" :hasMore="streams.length > 95 && page <= 8 && type != 'featured'" :path="`/streams/${type}`"/>
   </div>
 </template>
 
@@ -36,24 +36,15 @@
     data: function() {
       return {
         isLoading: true,
-        streams:   [],
-        pages:     0,
+        streams:   []
       }
     },
 
     methods: {
       setStreams: async function() {
         this.isLoading = true
-
-        fetchStreams({
-          offset:   this.page > 0 ? this.page * 100 : 0,
-          featured: this.type == 'featured'
-        })
-          .then(streams => {
-            this.pages     = streams.pages
-            this.streams   = streams.items
-            this.isLoading = false
-          })
+        this.streams   = await fetchStreams({offset: this.page * 100, featured: this.type == 'featured'})
+        this.isLoading = false
       }
     },
 

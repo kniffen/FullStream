@@ -97,10 +97,11 @@
 
 <style scoped>
   .stream-preview {
-    background-color: var(--color-bg-2);
+    background-color: var(--color-bg-3);
     position: relative;
     display: block;
     height: 135px;
+    overflow: hidden;
   }
 
   .stream-thumbnail {

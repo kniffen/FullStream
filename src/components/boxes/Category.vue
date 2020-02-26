@@ -39,7 +39,7 @@
 
   .category-box-art {
     display: block;
-    background-color: var(--color-bg-2);
+    background-color: var(--color-bg-3);
     width: 136px;
     height: 190px;
   }

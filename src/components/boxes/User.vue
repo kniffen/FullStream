@@ -24,7 +24,7 @@
   }
 
   .user-avatar {
-    background-color: var(--color-bg-2);
+    background-color: var(--color-bg-3);
     width: 128px;
     height: 128px;
   }

@@ -78,7 +78,7 @@
 
 <style scoped>
   .video-preview {
-    background-color: var(--color-bg-2);
+    background-color: var(--color-bg-3);
     position: relative;
     display: grid;
     align-content: center;

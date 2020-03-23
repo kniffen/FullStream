@@ -4,17 +4,9 @@
 
   <Channel v-bind:name="name" v-else-if="user" v-bind:class="user.streamType" >
     <section class="channel-info">
-      <div class="channel-thumbnail">
-        <router-link class="channel-link" v-bind:to="`/watch/${name}`">
-          <i class="fsif-play"></i>
-        </router-link>
-        
-        <img v-lazy="
-          user.thumbnail ? 
-          user.thumbnail.replace('{width}', '1280').replace('{height}', '720') : 
-          user.avatar"
-        >
-      </div>
+      <router-link v-bind:to="`/watch/${name}`">
+        <img  v-lazy="user.avatar" />
+      </router-link>
 
       <ul>
         <li v-if="user.streamType">{{user.title}}</li>
@@ -58,6 +50,16 @@
           >{{followBtnText}}</button>
 
           <a class="cta-twitch" v-bind:href="`https://www.twitch.tv/${user.name}`" target="_blank"><i class="fsif-twitch"></i> View on twitch</a>
+        </li>
+
+        <li>
+          <div class="channel-thumbnail">
+            <router-link class="channel-link" v-bind:to="`/watch/${name}`">
+              <i class="fsif-play"></i>
+            </router-link>
+
+            <img v-if="user.thumbnail" v-lazy="user.thumbnail.replace('{width}', '1280').replace('{height}', '720')">
+          </div>
         </li>
       
       </ul>
@@ -108,8 +110,8 @@
     },
 
     methods: {
-      formatDate: function(date, full) {
-        return full ? moment(date).calendar() : moment(date).fromNow(true)
+      formatDate: function(date, verbose) {
+        return verbose ? moment(date).format('LLLL') : moment(date).format('LL')
       },
 
       toggleFollow: async function() {
@@ -178,20 +180,19 @@
 <style scoped>
   .channel-info {
     display: grid;
-    grid-template-columns: 420px minmax(420px, 1fr);
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: repeat(minmax(0, auto));
     grid-gap: 1em;
     font-size: 1.2rem;
-  }
-
-  .live .channel-info {
-    grid-template-columns: repeat(2, minmax(420px, 1fr));
   }
   
   .channel-info ul {
     list-style: none;
     display: grid;
     grid-gap: 1em;
-    align-content: end;
+    align-content: start;
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
   }
 
   .channel-thumbnail {
@@ -199,7 +200,8 @@
     position: relative;
   }
 
-  .channel-thumbnail img {
+  .channel-info img {
+    display: block;
     width: 100%;
     height: auto;
   }
@@ -232,6 +234,7 @@
   }
   
   .cta{
+    width: 100px;
     margin-right: 1em;
   }
 </style>

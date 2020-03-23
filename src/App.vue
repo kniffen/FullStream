@@ -1,8 +1,6 @@
 <template>
 
-  <Loading v-if="isLoading" />
-
-  <div id="app" v-else>
+  <div id="app">
     <Header v-bind="{userID, current, chatHidden, settings}" />
     <Media v-bind="{settings, current}" />
     <main>
@@ -40,7 +38,6 @@
 </template>
 
 <script>
-  import Loading    from './components/Loading'
   import Header     from './components/Header'
   import Media      from './components/Media'
   import Navigation from './components/Navigation'
@@ -55,7 +52,7 @@
   export default {
     name: 'App',
 
-    components: {Loading, Header, Media, Navigation},
+    components: {Header, Media, Navigation},
 
     data: function() {
       return {

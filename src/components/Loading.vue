@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div id="loading-wrapper">
     <div id="loading">
-      <i id="icon" class="fsif-cog"></i>
+      <i v-if="isVisible" id="icon" class="fsif-cog"></i>
     </div>
   </div>
 </template>
@@ -9,10 +9,32 @@
 <script>
   export default {
     name: 'Loading',
+
+    data: function() {
+      return {
+        isVisible: false,
+        timer:     null
+      }
+    },
+
+    mounted: function() {
+      if (!this.timer)
+        this.timer = setTimeout(() => { this.isVisible = true}, 500)
+    },
+
+    beforeDestroy: function() {
+      if (this.timer) clearTimeout(this.timer)
+      this.isVisible = false
+    }
   }
 </script>
 
 <style scoped>
+  #loading-wrapper {
+    position: relative;
+    min-height: 25vh;
+  }
+
   #loading {
     position: absolute;
     width: 100%;
@@ -25,9 +47,18 @@
   #icon {
     position: relative;
     font-size: 5rem;
-    animation: spin 2.5s cubic-bezier(.79, 0, .47, .97) infinite;
+    opacity: 0;
+    animation: spin 2.5s cubic-bezier(.79, 0, .47, .97) infinite, fadeIn .25s ease-in forwards;
   }
 
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 
   @keyframes spin {
     0% {

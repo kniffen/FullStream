@@ -114,7 +114,9 @@
     <section>
       <h2>Manage channels</h2>
 
-      <div class="channels">
+      <Loading v-if="isLoading" />
+
+      <div class="channels" v-else>
         <div class="channel" v-for="channel in channels" :id="channel.id">
           <img v-lazy="channel.avatar">
           <div>
@@ -219,6 +221,8 @@
         if (a.name > b.name) return 1
         return 0
       })
+
+      this.isLoading = false
     },
 
     watch: {

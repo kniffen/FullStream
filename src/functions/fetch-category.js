@@ -11,6 +11,7 @@ export default async function fetchCategory({ id, name }) {
   const res = await fetch(uri, {
     headers: {
       'Client-ID': process.env.VUE_APP_CLIENT_ID,
+      'Authorization': `Bearer ${localStorage.token}`
     }
   })
 

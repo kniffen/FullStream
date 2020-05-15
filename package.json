@@ -1,7 +1,9 @@
 {
   "name": "fullstream",
-  "version": "5.3.3-beta",
+  "version": "5.4.0",
   "private": true,
+  "license": "MIT",
+  "author": "Kniffen <knifftech@gmail.com>",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --dest docs"

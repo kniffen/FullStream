@@ -120,6 +120,12 @@
         this.parseChannels()
       }, 60000)
     },
+
+    watch: {
+      userID: function() {
+        this.parseChannels()
+      }
+    }
   }
 </script>
 

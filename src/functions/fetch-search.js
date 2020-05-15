@@ -15,6 +15,8 @@ export default async function(type, query) {
   switch (type) {
     case 'streams':
       data.streams.forEach(_stream => {
+        if (!_stream) return
+
         results.push({
           id:          _stream.channel._id,
           streamID:    _stream._id,
@@ -40,6 +42,8 @@ export default async function(type, query) {
 
     case 'users':
       data.users.forEach(user => {
+        if (!user) return
+        
         results.push({
           id:          user._id,
           name:        user.name,
@@ -51,6 +55,8 @@ export default async function(type, query) {
 
     case 'games':
       data.games.forEach(category => {
+        if (!category) return
+
         results.push({
           id:      category._id,
           name:    category.name,

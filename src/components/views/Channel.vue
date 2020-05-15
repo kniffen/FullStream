@@ -11,7 +11,6 @@
         <router-link v-bind:to="`/channel/${name}/videos/highlight`">Highlights</router-link>
         <router-link v-bind:to="`/channel/${name}/videos/upload`">Uploads</router-link>
         <router-link v-bind:to="`/channel/${name}/clips`">Clips</router-link>
-        <router-link v-bind:to="`/channel/${name}/Events`">Events</router-link>
         <router-link v-bind:to="`/channel/${name}/followers`">Followers</router-link>
         <router-link v-bind:to="`/channel/${name}/following`">Following</router-link>
       </div>

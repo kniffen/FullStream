@@ -17,7 +17,6 @@ import About       from '@/components/views/About'
 import ChannelInfo      from '@/components/views/channel/Info'
 import ChannelVideos    from '@/components/views/channel/Videos'
 import ChannelClips     from '@/components/views/channel/Clips'
-import ChannelEvents    from '@/components/views/channel/Events'
 import ChannelFollowers from '@/components/views/channel/Followers'
 import ChannelFollowing from '@/components/views/channel/Following'
 
@@ -152,11 +151,6 @@ const router = new Router({
       path:      '/channel/:name/clips',
       name:      'ChannelClips',
       component: ChannelClips,
-    },
-    {
-      path:      '/channel/:name/events',
-      name:      'ChannelEvents',
-      component: ChannelEvents,
     },
     {
       path:      '/channel/:name/followers',

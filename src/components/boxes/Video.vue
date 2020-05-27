@@ -116,6 +116,7 @@
     display: grid;
     grid-template-columns: 30px minmax(0, auto);
     line-height: 30px;
+    z-index: 10;
   }
 
   .channel-identity a {

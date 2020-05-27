@@ -19,7 +19,7 @@
 
       <div class="channel-identity">
         <img :src="avatar">
-        <router-link v-bind:to="`/channel/${name}`">{{displayName}}</router-link>
+        <router-link v-bind:to="`/channel/${name}/videos/archive`">{{displayName}}</router-link>
       </div>
     </div>
   
@@ -43,7 +43,7 @@
         <span>Hosted by:</span>
         <router-link 
           v-for="host in hosts" 
-          :key="host.id" v-bind:to="`/channel/${host.name}`"
+          :key="host.id" v-bind:to="`/channel/${host.name}/videos/archive`"
         >{{host.displayName}}</router-link>
       </div>
     </div>

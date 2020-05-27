@@ -1,14 +1,12 @@
 <template>
+  <Loading v-if="isLoading" />
   
-  <Channel v-bind:name="$route.params.name">
-    
-    <Loading v-if="isLoading" />
-
-    <div v-else>
-      <div class="video-list">
-        <Video v-for="clip in clips" :key="clip.slug" v-bind="clip" />
-      </div>
+  <Channel v-bind="{name, userID}" v-else>
+    <div class="video-list" v-if="clips && clips.length">
+      <Video v-for="clip in clips" :key="clip.slug" v-bind="clip" />
     </div>
+
+    <h3 v-else>No clips available</h3>
   </Channel>
 
 </template>
@@ -25,10 +23,18 @@
 
     components: {Loading, Channel, Video},
 
+    props: ['username', 'userID'],
+
     data: function() {
       return {
         isLoading:     true,
         isLoadingMore: false,
+      }
+    },
+
+    computed: {
+      name: function() {
+        return this.$route.params.name
       }
     },
 

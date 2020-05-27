@@ -148,7 +148,7 @@ const router = new Router({
     {
       path:      '/channel/:name',
       name:      'ChannelInfo',
-      component: ChannelInfo,
+      component: ChannelVideos,
     },
     {
       path:      '/channel/:name/videos/:type',

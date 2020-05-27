@@ -12,7 +12,7 @@
 
       <div v-if="channel" class="channel-identity">
         <img v-lazy="channel.avatar">
-        <router-link v-bind:to="`/channel/${channel.name}`">{{channel.displayName}}</router-link>
+        <router-link v-bind:to="`/channel/${channel.name}/videos/archive`">{{channel.displayName}}</router-link>
       </div>
     </div>
 

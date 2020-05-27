@@ -1,6 +1,6 @@
 <template>
   <div class="user">
-    <router-link class="user-avatar" v-bind:to="`/channel/${name}`">
+    <router-link class="user-avatar" v-bind:to="`/channel/${name}/videos/archive`">
       <img v-lazy="avatar" />
     </router-link>
 
@@ -25,8 +25,8 @@
 
   .user-avatar {
     background-color: var(--color-bg-3);
-    width: 128px;
-    height: 128px;
+    width: 100%;
+    height: auto;
   }
 
   .user span {

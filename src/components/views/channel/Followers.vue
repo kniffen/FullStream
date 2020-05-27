@@ -1,17 +1,15 @@
 <template>
+  <Loading v-if="isLoading" />
   
-  <Channel v-bind:name="channelName">
-    <Loading v-if="isLoading" />
-
-    <div v-else>
-      <div class="user-list">
-        <User v-for="user in users" :key="user.id" v-bind="user" />
-      </div>
-
-      <Pagination :page="page" :hasMore="users.length > 95" :path="`/channel/${channelName}/followers`"/>
+  <Channel v-bind="{name, userID}" v-else>
+    <div class="user-list" v-if="users && users.length">
+      <User v-for="user in users" :key="user.id" v-bind="user" />
     </div>
-  </Channel>
 
+    <h3 v-else>No users available</h3>
+
+    <Pagination :page="page" :hasMore="users.length > 95" :path="`/channel/${name}/followers`"/>
+  </Channel>
 </template>
 
 <script>
@@ -21,12 +19,14 @@
   import Pagination from '../../elements/Pagination'
 
   import fetchChannelFollowers from '../../../functions/fetch-channel-followers'
-  import fetchSearch  from '../../../functions/fetch-search'
+  import fetchSearch           from '../../../functions/fetch-search'
 
   export default {
     name: 'ChannelFollowers',
 
     components: {Loading, Channel, User, Pagination},
+
+    props: ['username', 'userID'],
 
     data: function() {
       return {
@@ -36,7 +36,7 @@
     },
 
     computed: {
-      channelName: function() {
+      name: function() {
         return this.$route.params.name
       },
       page: function() {
@@ -48,8 +48,14 @@
       setUsers: async function() {
         this.isLoading = true
 
-        const searchResults = await fetchSearch("users", this.channelName.toLowerCase())
-        const user          = searchResults.find(entry => entry.name.toLowerCase() == this.channelName.toLowerCase())
+        const searchResults = await fetchSearch("users", this.name.toLowerCase())
+        const user          = searchResults.find(entry => entry.name.toLowerCase() == this.name.toLowerCase())
+
+        if (!user) {
+          this.isLoading = false
+          return
+        }
+
         const users         = await fetchChannelFollowers(user.id, this.page * 100)
 
         this.users     = users.items

@@ -1,16 +1,14 @@
 <template>
+<Loading v-if="isLoading" />
 
-  <Channel v-bind:name="$route.params.name">
-    <Loading v-if="isLoading" />
-
-    <div v-else>
-      <div class="video-list">
-        <Video v-for="video in videos" v-if="video.isPublic" :key="video.id" v-bind="video" />
-      </div>
-
-      <Pagination :page="page" :hasMore="videos.length > 95" :path="`/channel/${channelName}/videos/${type}`"/>
+  <Channel v-bind="{name, userID}" v-else>
+    <div class="video-list" v-if="videos.length">
+      <Video v-for="video in videos" v-if="video.isPublic" :key="video.id" v-bind="video" />
     </div>
 
+    <h3 v-else>No videos available</h3>
+
+    <Pagination :page="page" :hasMore="videos.length > 95" :path="`/channel/${name}/videos/${type}`"/>
   </Channel>
 
 </template>
@@ -29,6 +27,8 @@
 
     components: {Loading, Channel, Video, Pagination},
 
+    props: ['username', 'userID'],
+
     data: function() {
       return {
         isLoading: true,
@@ -40,8 +40,13 @@
       setVideos: async function() {
         this.isLoading = true
 
-        const searchResults = await fetchSearch("users", this.channelName.toLowerCase())
-        const user = searchResults.find(entry => entry.name.toLowerCase() == this.channelName.toLowerCase())
+        const searchResults = await fetchSearch("users", this.name.toLowerCase())
+        const user = searchResults.find(entry => entry.name.toLowerCase() == this.name.toLowerCase())
+
+        if (!user) {
+          this.isLoading = false
+          return
+        }
 
         const videos = await fetchVideos({
           channelID: user.id,
@@ -58,7 +63,7 @@
       type: function() {
         return this.$route.params.type
       },
-      channelName: function() {
+      name: function() {
         return this.$route.params.name
       },
       page: function() {

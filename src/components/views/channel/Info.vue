@@ -1,74 +1,67 @@
 <template>
-  
   <Loading v-if="isLoading" />
 
-  <Channel v-bind:name="name" v-else-if="user" v-bind:class="user.streamType" >
-    <section class="channel-info">
-      <router-link v-bind:to="`/watch/${name}`">
-        <img  v-lazy="user.avatar" />
+  <section class="channel-info" v-else-if="user">
+
+<!--     <div class="channel-thumbnail">
+      <router-link class="channel-link" v-bind:to="`/watch/${name}`">
+        <i class="fsif-play"></i>
       </router-link>
+      <img v-if="user.thumbnail" v-lazy="user.thumbnail.replace('{width}', '1280').replace('{height}', '720')">
+    </div> -->
+    
+    <router-link v-bind:to="`/watch/${name}`">
+      <img  v-lazy="user.avatar" />
+    </router-link>
 
-      <ul>
-        <li v-if="user.streamType">{{user.title}}</li>
+    <ul>
+      <li v-if="user.streamType">{{user.title}}</li>
 
-        <li v-if="user.streamType" v-bind:title="`Category: ${user.category.name}`">
-          <CategoryIcon v-bind:name="user.category.name" />{{user.category.name}}
-        </li>
+      <li v-if="user.streamType" v-bind:title="`Category: ${user.category.name}`">
+        <CategoryIcon v-bind:name="user.category.name" />{{user.category.name}}
+      </li>
 
-        <li v-bind:title="`Joined Twitch ${formatDate(user.created, true)}`">
-          <i class="fsif-calendar"></i> {{formatDate(user.created)}}
-        </li>
+      <li v-bind:title="`Joined Twitch ${formatDate(user.created, true)}`">
+        <i class="fsif-calendar"></i> {{formatDate(user.created)}}
+      </li>
 
-        <li v-bind:title="`${user.followers.toLocaleString()} Followers`">
-          <i class="fsif-heart"></i> {{user.followers.toLocaleString()}}
-        </li>
-        
-        <li v-bind:title="`${user.views.toLocaleString()} Views`">
-          <i class="fsif-eye"></i> {{user.views.toLocaleString()}}
-        </li>
-
-        <li v-if="user.isPartner" v-bind:title="`${user.displayName} is partnered with Twitch.TV`">
-          <i class="fsif-twitch"></i> Twitch partner
-        </li>
-
-        <li v-if="isSubscribed" v-bind:title="`You are subscribed to ${user.displayName}`">
-          <i class="fsif-sub"></i> Subscribed
-        </li>
+      <li v-bind:title="`${user.followers.toLocaleString()} Followers`">
+        <i class="fsif-heart"></i> {{user.followers.toLocaleString()}}
+      </li>
       
-        <li v-if="teams.length > 0" class="channel-teams">
-          <i class="fsif-users" title="Teams"></i>
-          <router-link v-for="team in teams" :key="team.id" v-bind:to="`/team/${team.name}`">{{team.displayName}}</router-link>
-        </li>
+      <li v-bind:title="`${user.views.toLocaleString()} Views`">
+        <i class="fsif-eye"></i> {{user.views.toLocaleString()}}
+      </li>
 
-        <li class="channel-buttons">
-          <button 
-            class="cta" 
-            v-if="userID && userID != user.id"
-            @click="toggleFollow"
-            @mouseover="mouseOver"
-            @mouseout="mouseOut"
-          >{{followBtnText}}</button>
+      <li v-if="user.isPartner" v-bind:title="`${user.displayName} is partnered with Twitch.TV`">
+        <i class="fsif-twitch"></i> Twitch partner
+      </li>
 
-          <a class="cta-twitch" v-bind:href="`https://www.twitch.tv/${user.name}`" target="_blank"><i class="fsif-twitch"></i> View on twitch</a>
-        </li>
+      <li v-if="isSubscribed" v-bind:title="`You are subscribed to ${user.displayName}`">
+        <i class="fsif-sub"></i> Subscribed
+      </li>
+    
+      <li v-if="teams.length > 0" class="channel-teams">
+        <i class="fsif-users" title="Teams"></i>
+        <router-link v-for="team in teams" :key="team.id" v-bind:to="`/team/${team.name}`">{{team.displayName}}</router-link>
+      </li>
 
-        <li>
-          <div class="channel-thumbnail">
-            <router-link class="channel-link" v-bind:to="`/watch/${name}`">
-              <i class="fsif-play"></i>
-            </router-link>
+      <li class="channel-buttons">
+        <button 
+          class="cta" 
+          v-if="userID && userID != user.id"
+          @click="toggleFollow"
+          @mouseover="mouseOver"
+          @mouseout="mouseOut"
+        >{{followBtnText}}</button>
 
-            <img v-if="user.thumbnail" v-lazy="user.thumbnail.replace('{width}', '1280').replace('{height}', '720')">
-          </div>
-        </li>
-      
-      </ul>
-    </section>
-  </Channel>
+        <a class="cta-twitch" v-bind:href="`https://www.twitch.tv/${user.name}`" target="_blank"><i class="fsif-twitch"></i> View on twitch</a>
+      </li>
+    
+    </ul>
+  </section>
 
-  <div v-else>
-    <p>Could not find channel "{{name}}"</p>
-  </div>
+  <h3 v-else>User {{name}} could not be found</h3>
 
 </template>
 
@@ -76,7 +69,6 @@
   import moment from 'moment'
 
   import Loading      from '../../Loading'
-  import Channel      from '../Channel'
   import CategoryIcon from '../../icons/CategoryIcon'
 
   import fetchChannel from '../../../functions/fetch-channel'
@@ -93,13 +85,12 @@
   export default {
     name: 'ChannelInfo',
 
-    components: {Channel, Loading, CategoryIcon},
+    components: {Loading, CategoryIcon},
 
-    props: ['userID'],
+    props: ['name', 'userID'],
 
     data: function() {
       return {
-        name:          this.$route.params.name,
         isLoading:     true,
         user:          null,
         teams:         [],
@@ -137,11 +128,15 @@
       },
 
       fetchData: async function() {
+        this.isLoading = true
+
         const name   = this.$route.params.name
         
         const searchResults = await fetchSearch("users", name.toLowerCase())
-        const id = searchResults.find(entry => entry.name.toLowerCase() == name.toLowerCase()).id
+        const { id }        = searchResults.find(entry => entry.name.toLowerCase() == name.toLowerCase())
         
+        if (!id) return
+
         let user = await fetchStream(id, this.userID)
 
         if (!user) user = await fetchChannel(id, this.userID)
@@ -159,12 +154,13 @@
         checkSubscriptionStatus(this.userID, this.user.id).then(success => {
           this.isSubscribed = success
         })
+
+        this.isLoading = false
       }
     },
 
-    mounted: async function() {
-      await this.fetchData()
-      this.isLoading = false
+    mounted: function() {
+      this.fetchData()
     },
 
     watch: {
@@ -179,20 +175,16 @@
 
 <style scoped>
   .channel-info {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    grid-template-rows: repeat(minmax(0, auto));
-    grid-gap: 1em;
+    display: flex;
     font-size: 1.2rem;
   }
   
   .channel-info ul {
     list-style: none;
     display: grid;
-    grid-gap: 1em;
+    grid-gap: .5em;
     align-content: start;
-    grid-column: 2 / 3;
-    grid-row: 1 / 3;
+    margin: 0;
   }
 
   .channel-thumbnail {
@@ -236,5 +228,13 @@
   .cta{
     width: 100px;
     margin-right: 1em;
+  }
+
+  @media (min-width: 768px) {
+    .channel-info {
+      display: grid;
+      align-content: start;
+      grid-gap: 1em;
+    }
   }
 </style>

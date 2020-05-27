@@ -3,16 +3,17 @@ import Router from 'vue-router'
 
 import Loading from '@/components/Loading'
 
-import Following   from '@/components/views/Following'
-import Categories  from '@/components/views/Categories'
-import Category    from '@/components/views/Category'
-import Streams     from '@/components/views/Streams'
-import Teams       from '@/components/views/Teams'
-import Team        from '@/components/views/Team'
-import Videos      from '@/components/views/Videos'
-import Search      from '@/components/views/Search'
-import Settings    from '@/components/views/Settings'
-import About       from '@/components/views/About'
+import Following      from '@/components/views/Following'
+import Categories     from '@/components/views/Categories'
+import Category       from '@/components/views/Category'
+import Streams        from '@/components/views/Streams'
+import Teams          from '@/components/views/Teams'
+import Team           from '@/components/views/Team'
+import Videos         from '@/components/views/Videos'
+import Search         from '@/components/views/Search'
+import Settings       from '@/components/views/Settings'
+import ManageChannels from '@/components/views/ManageChannels'
+import About          from '@/components/views/About'
 
 import ChannelInfo      from '@/components/views/channel/Info'
 import ChannelVideos    from '@/components/views/channel/Videos'
@@ -110,6 +111,18 @@ const router = new Router({
       name:      'Settings',
       component: Settings,
       meta: { title: 'Settings' }
+    },
+    {
+      path:      '/settings/manage-channels',
+      name:      'ManageChannels',
+      component: ManageChannels,
+      meta: { title: 'Manage channels' }
+    },
+    {
+      path:      '/settings/manage-channels/page/:page',
+      name:      'ManageChannels',
+      component: ManageChannels,
+      meta: { title: 'Manage channels' }
     },
     {
       path:      '/about',

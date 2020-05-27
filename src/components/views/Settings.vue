@@ -70,6 +70,10 @@
           </label>
         </div>
       </form>
+
+      <br />
+
+      <router-link class="cta" to="/settings/manage-channels" :userID="userID">Manage channels</router-link>
     </section>
 
     <section>
@@ -112,26 +116,6 @@
     </section>
 
     <section>
-      <h2>Manage channels</h2>
-
-      <Loading v-if="isLoading" />
-
-      <div class="channels" v-else>
-        <div class="channel" v-for="channel in channels" :id="channel.id">
-          <img v-lazy="channel.avatar">
-          <div>
-            <router-link v-bind:to="`/channel/${channel.name}`">{{channel.displayName}}</router-link>
-            <span>Followed since<br>{{formatDate(channel.followedSince.toLocaleString())}}</span>
-            <button 
-              class="cta" 
-              v-on:click="toggleFollow(channel.id)"
-            >{{channel.isFollowing ? 'Unfollow' : 'Follow'}}</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section>
       <h2>Data</h2>
 
       <button class="cta" v-on:click="eraseData">Erase data</button>
@@ -148,81 +132,23 @@
 </template>
 
 <script>
-  import moment from 'moment'
-
-  import Loading from '../Loading'
-
-  import fetchFollowingUsers from '../../functions/fetch-following-users'
-  import follow              from '../../functions/follow'
-  import unfollow            from '../../functions/unfollow'
-
   export default {
     name: 'Settings',
-
-    components: {Loading},
 
     props: ['userID', 'username', 'settings'],
 
     data: function() {
       return {
-        isLoading: true,
-        hasToken:  localStorage.token ? true : false,
-        channels:  [],
+        hasToken: localStorage.token ? true : false,
       }
     },
 
     methods: {
-      formatDate: function(date, full) {
-        return moment(date).format('LL')
-      },
-
-      toggleFollow: async function(id) {
-        const channel = this.channels.find(channel => channel.id == id)
-
-        if (channel.isFollowing) {
-          const success = await unfollow(this.userID, channel.id)
-          channel.isFollowing = !success
-        } else {
-          const success = await follow(this.userID, channel.id)
-          channel.isFollowing = success
-        }
-
-      },
-
       eraseData: function() {
         delete localStorage.token
         delete localStorage.settings
         window.location.reload()
       }
-    },
-
-    mounted: async function() {
-      for (let offset = 0; 0 < 1000; offset += 100) {
-        const channels = await fetchFollowingUsers(this.userID, offset)
-        
-        channels.items.forEach(channel => {
-          if (!this.channels.find(existing => existing.id == channel.id)) {
-            this.channels.push({
-              avatar:        channel.avatar,
-              id:            channel.id,
-              name:          channel.name,
-              displayName:   channel.displayName,
-              followedSince: channel.followedSince,
-              isFollowing:   true,
-            })
-          }
-        })
-
-        if (channels.items.length < 100) break
-      }
-
-      this.channels.sort((a, b) => {
-        if (a.name < b.name) return -1
-        if (a.name > b.name) return 1
-        return 0
-      })
-
-      this.isLoading = false
     },
 
     watch: {
@@ -305,30 +231,5 @@
     border: 0px;
     padding: .25em;
     margin-right: .5em;
-  }
-
-  .channels {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 250px);
-    grid-gap: 1em;
-  }
-
-  .channel {
-    display: grid;
-    grid-template-columns: 100px minmax(0, 1fr);
-    grid-gap: .5em;
-  }
-
-  .channel img {
-    background-color: var(--color-bg-2);
-    width: 100px;
-    height: 100px;
-  }
-
-  .channel > div {
-    display: grid;
-    grid-gap: .25em;
-    align-content: start;
-    justify-items: start;
   }
 </style>

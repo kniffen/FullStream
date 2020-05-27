@@ -160,10 +160,6 @@ i {
   grid-template-columns: repeat(3, 434px);
 }
 
-.event-list {
-  grid-template-columns: repeat(auto-fill, calc(320px - 1em));
-}
-
 ::-webkit-scrollbar {
   background-color: var(--color-bg-2);
 }

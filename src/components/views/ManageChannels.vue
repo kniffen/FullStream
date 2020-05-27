@@ -20,7 +20,8 @@
 
     <div class="pagination">
       <router-link
-        v-for="n in pages" 
+        v-for="n in pages"
+        :key="n"
         :to="n > 1 ? `/settings/manage-channels/page/${n}` : `/settings/manage-channels`"
       >{{n}}</router-link>
     </div>    

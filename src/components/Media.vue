@@ -4,7 +4,7 @@
     
     <iframe
       id="video"
-      v-bind:src="videoURL()"
+      v-bind:src="videoURL"
       frameborder="0" 
       allowfullscreen="false" 
       scrolling="no">
@@ -15,7 +15,7 @@
       id="chat"
       frameborder="0" 
       scrolling="no" 
-      v-bind:src="`https://www.twitch.tv/embed/${current.channel.name}/chat?${settings.theme == 'dark' ? 'darkpopout' : ''}`">
+      v-bind:src="chatURL">
     </iframe>
 
   </div>
@@ -28,22 +28,26 @@
 
     props: ['settings', 'current'],
 
-    methods: {
+    computed: {
       videoURL: function() {
         const {channel, video, clip} = this.current
         let url
 
         if (channel) {
-          url = `https://player.twitch.tv/?channel=${channel.name}`
+          url = `https://player.twitch.tv/?channel=${channel.name}&parent=${process.env.VUE_APP_HOST}`
         } else if (video) {
-          url = `https://player.twitch.tv/?video=${video.id}`
+          url = `https://player.twitch.tv/?video=${video.id}&parent=${process.env.VUE_APP_HOST}`
         } else if (clip) {
-          url = `https://clips.twitch.tv/embed?clip=${clip.slug}&tt_medium=clips_api&tt_content=embed`
+          url = `https://clips.twitch.tv/embed?clip=${clip.slug}&tt_medium=clips_api&tt_content=embed&parent=${process.env.VUE_APP_HOST}`
         }
 
         return url
+      },
+
+      chatURL: function() {
+        return `https://www.twitch.tv/embed/${this.current.channel.name}/chat?${this.settings.theme == 'dark' ? 'darkpopout' : ''}&parent=${process.env.VUE_APP_HOST}`
       }
-    },
+    }
   }
 </script>
 

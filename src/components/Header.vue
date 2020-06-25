@@ -111,18 +111,23 @@
 
     data: function() {
       return {
-        hasToken:      localStorage.token ? true : false,
-        uptime:        0,
-        image:         '',
-        title:         '',
-        name:          '',
-        displayName:   '',
-        category:      '',
-        viewers:       0,
-        views:         0,
-        mediaStats:    '',
-        isFollowing:   false,
-        isSubscribed:  false,
+        image:        '',
+        title:        '',
+        name:         '',
+        displayName:  '',
+        category:     '',
+        mediaStats:   '',
+        uptime:       0,
+        viewers:      0,
+        views:        0,
+        isFollowing:  false,
+        isSubscribed: false,
+      }
+    },
+
+    computed: {
+      hasToken: function() {
+        return localStorage.token ? true : false
       }
     },
 

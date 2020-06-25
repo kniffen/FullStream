@@ -164,6 +164,7 @@
       if (tokenStr) {
         localStorage.token = tokenStr[1]
         this.$router.push('/following')
+        window.location.reload()
       }
 
       if (localStorage.token) {

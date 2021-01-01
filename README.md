@@ -1,3 +1,7 @@
+```diff
+- This project is currently on hold/abandoned due to Twitch API and embed limitations)
+```
+
 # FullStream
 
 > An alternative interface for browsing and viewing Twitch.tv content
